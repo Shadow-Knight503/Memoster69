@@ -1,0 +1,12 @@
+body{
+    background-color: black;
+    color: lightgray;
+}
+h2{
+    text-align: center;
+    color: lightgray;
+    font-family: "Times New Roman", fantasy;
+}
+.nav-wrapper{
+    background-color: navy;
+}

@@ -1,0 +1,28 @@
+.card {
+    height: auto;
+    width: auto;
+    overflow: hidden;
+    background-color: black;
+    border-bottom: 5px solid navy;
+    border-right: 5px solid navy;
+    border-left: 5px solid navy;
+    border-top: 5px solid navy;
+}
+.card-reveal{
+    color: lightgray;
+    flood-color: black;
+}
+.card-image {
+    height: auto;
+    max-width: 75%;
+    overflow: hidden;
+}
+.container{
+    alignment: center;
+}
+body{
+    background-color: black;
+}
+.nav-wrapper{
+    background-color: navy;
+}

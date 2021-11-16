@@ -1,0 +1,46 @@
+{% load static %}
+{% load materializecss %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/style_post.css" %}">
+    <title>Post</title>
+</head>
+<body>
+<nav>
+    <div class="nav-wrapper">
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="brand-logo"><i class="material-icons">flash_on</i>Memes</a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="/"><i class="material-icons">home</i> </a></li>
+            <li><a href="/post/"><i class="material-icons">key</i> </a></li>
+            <li><a href="/register/"><i class="material-icons">account_circle</i></a></li>
+        </ul>
+    </div>
+</nav>
+<h2><u>Post Memes Here</u></h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="container">
+        {{ form.Title|materializecss }}
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>File</span>
+                <input type="file">
+            </div>
+            <div class="file-path-wrapper">
+                {{ form.Post_Img }}
+                <input class="file-path validate" type="text">
+            </div>
+        </div>
+        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+            <i class="material-icons right">send</i>
+        </button>
+    </div>
+</form>
+<h5>*Images only</h5>
+</body>
+</html>

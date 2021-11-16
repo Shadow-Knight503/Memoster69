@@ -1,0 +1,22 @@
+.heading{
+    font-family: "Times New Roman", sans-serif;
+    font-size: large;
+    text-align: center;
+    color: grey;
+    width: 100%;
+    height: 200px;
+}
+
+.loginform {
+    color: white;
+}
+.btnw{
+    background: navy;
+}
+body{
+    background-color: black;
+    color: white;
+}
+.nav-wrapper{
+    background-color: navy;
+}

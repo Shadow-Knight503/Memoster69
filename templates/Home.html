@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/style_home.css" %}">
+    <title>Memoster</title>
+</head>
+<body>
+<nav>
+    <div class="nav-wrapper">
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="brand-logo"><i class="material-icons">flash_on</i>Memes</a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="/"><i class="material-icons">home</i> </a></li>
+            <li><a href="/post/"><i class="material-icons">key</i> </a></li>
+            <li><a href="/register/"><i class="material-icons">account_circle</i></a></li>
+        </ul>
+    </div>
+</nav>
+{% for Img in imgs %}
+    <div class="container">
+        <div class="card">
+            <div class="card-image waves-effect waves-block waves-light">
+              <img class="activator" src="{{ Img.Post_Img.url }}" alt="image">
+            </div>
+            <div class="card-content">
+              <span class="card-title activator white-text text">{{ Img.Title }}<i class="material-icons right">more_vert</i></span>
+              <p><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Vote</a></p>
+            </div>
+            <div class="card-reveal darken-4 black">
+              <span class="card-title white-text text">{{ Img.Title }}<i class="material-icons right">close</i></span>
+              <p>Comments:</p>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+</body>
+</html>
