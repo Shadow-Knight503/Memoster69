@@ -1,0 +1,238 @@
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/js/materialize.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Theme Builder</title>
+</head>
+<body id="body">
+<script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous">
+</script>
+<script>
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start !== -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end === -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start, c_end));
+            }
+        }
+        return "";
+    }
+    function colorSelected (element,param) {
+        const Change = document.querySelector(":root")
+        Change.style.setProperty(param,element.value)
+    }
+    function KillInput (name, set, prevset) {
+        const Collateral = document.querySelector(":root")
+        Collateral.style.setProperty(name, set)
+    }
+    function Change() {
+        const root = getComputedStyle(document.body)
+        $.ajaxSetup({
+            headers: {"X-CSRFToken": getCookie("csrftoken")}
+        });
+        $.ajax({
+            type: "POST",
+            url: "{% url "Build_your_Themes" %}",
+            data: {
+                "Act": "ChangeTheme",
+                "Nav_Back": root.getPropertyValue('--NavBack'),
+                "Nav_Color": root.getPropertyValue('--NavColor'),
+                "Nav_Line": root.getPropertyValue('--NavLine'),
+                "Card_Back": root.getPropertyValue('--CardBack'),
+                "Card_Color": root.getPropertyValue('--CardColor'),
+                "Card_Border": root.getPropertyValue('--CardBorder'),
+                "Body_Back": root.getPropertyValue('--BodyBack'),
+            },
+            dataType: "json",
+            complete: function () {
+                location.reload()
+            }
+        })
+    }
+</script>
+<div class="navbar-fixed">
+    <nav>
+        <div class="nav-wrapper" id="nav-wrapper">
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="brand-logo"><i
+                    class="material-icons" id="Navcons">flash_on</i><span class="Nav_Words">Memes</span>
+                <label style="font-size: 25px;color: inherit" class="Input">| Body:
+                    <input id="nav-wrapper-Input" onchange="colorSelected(this,'--NavBack')" type="color"
+                           style="background-color: black">
+                </label>
+                <label style="font-size: 25px;color: inherit" class="Input">| Font:
+                    <input id="nav-color-Input" onchange="colorSelected(this,'--NavColor')" type="color"
+                           style="background-color: black">
+                </label>
+                <label style="font-size: 25px;color: inherit" class="Input">| Line:
+                    <input id="nav-color-Input" onchange="colorSelected(this,'--NavLine')" type="color"
+                           style="background-color: black">
+                </label></a>
+            <a href="#" class="sidenav-trigger" data-target="slide-out"><i class="material-icons" id="Navcons">
+                menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{% url 'Home' %}"><i class="material-icons" id="Navcons">home</i> </a></li>
+                <li><a href="{% url 'Post_Page' %}"><i class="material-icons left" id="Navcons">attach_file</i><span
+                        class="Nav_Words">Post</span></a></li>
+                {% if user.is_authenticated %}
+                    {% if request.user.is_staff %}
+                        <li><a href=""><b class="Nav_Words">Admin</b></a></li>
+                        <li><a href="{% url 'User_List' %}"><span class="Nav_Words">User List</span></a></li>
+                    {% endif %}
+                    <li><span><b class="Nav_Words"><i>{{ name }}</i></b></span></li>
+                    <li><a href="{% url 'Profile_Page' %}"><img src="{{ url }}" alt="{{ name }}" class="profile"></a></li>
+                {% else %}
+                    <li><a href="{% url 'Register_Page' %}"><i class="material-icons">account_circle</i></a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</div>
+<div class="container">
+    <h3 style="color: white" class="Input">Background :<span>
+    <label style="font-size: 25px;color: inherit;">
+        <input id="body-Input" onchange="colorSelected(this,'--BodyBack')" type="color"
+               style="background-color: black">
+    </label></span></h3>
+    <div class="card" style="width: 669px" id="Meme{{ Img.id }}">
+        <div class="card-image" style="position: relative">
+            <img src="https://res.cloudinary.com/meme-topia/image/upload/v1647195381/Opera_Snapshot_2022-03-13_233944_127.0.0.1_v54bb1.png"
+                 alt="{{ Img.Title }}" ondblclick="Upvote({{ Img.id }})"
+                 class="activator" id="Img" style="display: block;width: 100%;height: 100%;object-fit:cover;">
+        </div>
+        <div class="card-content" id="card-content">
+            <img src="{{ Img.op.userprofile.Profile_pic.url }}" class="circle"
+                 alt="{{ Img.op.userprofile.Nick_Name }}">
+            <span class="OP">{{ Img.op.userprofile.Nick_Name }}</span>
+            <span class="card-title activator white-text text">{{ Img.Title }}
+                <p class="right">{{ Img.comment_set.count }}</p>
+                <i class="material-icons right" id="Cardcons"
+                   onclick="UpdateComment({{ Img.id }}); this.onclick=null;">comment
+                </i></span>
+            <div class="move" id="move">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                     fill="none" class="upvote" style="vertical-align: center">
+                    <path d=" M 49.4 8.5 l 25.8 30 h -15 v 46 h -20 v -46 h -15 l 26 -30"
+                          stroke="orangered" fill="orangered" stroke-width="5" id="Upvote"></path>
+                </svg>
+                <span style="font-size: 20px;vertical-align: top" id="Points{{ Img.id }}">
+                    69420</span>
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                     fill="none" class="downvote" style="vertical-align: center">
+                    <path class="downvote" d="M 50.8 9 h 10 v 45 h 15 l -25 30 l -25 -30 h 15 v -45 h 15"
+                        stroke="steelblue" fill="steelblue" stroke-width="5" id="Downvote"></path>
+                </svg>
+            </div>
+            <br>
+            <h5 class="Input">Background :
+            <label style="font-size: 25px;color: inherit" >
+                <input id="card-content-Input" onchange="colorSelected(this,'--CardBack')" type="color"
+                       style="background-color: black">
+            </label></h5>
+            <h5 class="Input">Font :
+            <label style="font-size: 25px;color: inherit">
+                <input id="card-content-Input" onchange="colorSelected(this,'--CardColor')" type="color"
+                       style="background-color: black">
+            </label></h5>
+            <h5 class="Input">Border :
+            <label style="font-size: 25px;color: inherit">
+                <input id="card-content-Input" onchange="colorSelected(this,'--CardBorder')" type="color"
+                       style="background-color: black">
+            </label></h5>
+        </div>
+        <div class="card-reveal black">
+            <span class="card-title white-text text">{{ Img.Title }}<i class="material-icons nav right" id="Cardcons">
+                close</i></span>
+            <form method="post" class="Comment_Form" id="{{ Img.id }}" name="{{ Img.id }}"
+                  onsubmit="">
+                {% csrf_token %}
+                <div class="comment_builder" id="Comment-{{ Img.id }}">{{ comment }}</div>
+                <button class="btn waves-effect waves-light btns" type="submit" value="{{ Img.id }}"
+                        id="The_Effing_Id-{{ Img.id }}"
+                        name="The_Effing_Id{{ Img.id }}">Comment
+                </button>
+            </form>
+            <br>
+            <h5>Font :
+            <label style="font-size: 25px;color: inherit">
+                <input id="card-content-Input" onchange="ColorFind(this)" type="color"
+                       style="background-color: black">
+            </label></h5>
+        </div>
+    </div>
+    <button class="btn waves-effect" type="submit" name="action"
+            onclick="KillInput('--KillCommand','none','inline')">Preview
+        <i class="material-icons right">tv</i>
+    </button>
+    <button class="btn waves-effect right" type="submit" name="action"
+            onclick="Change()">Confirm Changes ?
+        <i class="material-icons right">send</i>
+    </button>
+    <br>
+    <p class="hidden">Hidden text ?<br>
+    What could be it's purpose ?</p>
+</div>
+<style>
+    :root{
+        --NavBack    : {{ theme.Nav_Back }};
+        --NavColor   : {{ theme.Nav_Color }};
+        --NavLine    : {{ theme.Nav_Line }};
+        --CardBack   : {{ theme.Card_Back }};
+        --CardColor  : {{ theme.Card_Color }};
+        --CardBorder : {{ theme.Card_Border }};
+        --BodyBack   : {{ theme.Body_Back }};
+        --KillCommand: inline;
+    }
+    body{
+        background: var(--BodyBack);
+    }
+    .hidden{
+        color: var(--BodyBack);
+    }
+    .Input{
+        display: var(--KillCommand);
+    }
+    .brand-logo{
+        color: var(--NavColor);
+    }
+    .profile{
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        padding-top: 5px;
+    }
+    .nav-wrapper{
+        background: var(--NavBack);
+        border-bottom: 2px solid var(--NavLine);
+    }
+    #Navcons{
+        color: var(--NavColor);
+    }
+    #Cardcons{
+        color: var(--CardColor);
+    }
+    .card{
+        border: 2px solid var(--CardBorder);
+        background: var(--CardBack);
+        color: var(--CardColor);
+        border-radius: 1%;
+    }
+    #Img{
+        border-radius: 1%;
+    }
+    .Nav_Words{
+        color: var(--NavColor);
+    }
+</style>
+</body>
+</html>

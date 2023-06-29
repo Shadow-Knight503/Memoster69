@@ -1,0 +1,68 @@
+<div class="navbar-fixed">
+    <nav>
+        <div class="nav-wrapper">
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="brand-logo">
+                {% if Decor.Day == day %}
+                <img alt="Frog"
+                    src="https://res.cloudinary.com/meme-topia/image/upload/v1647417787/frog_uisgn2.png" class="circle"
+                    style="width: 35px;height: 35px" id="Navcons">
+                {% else %}
+                <i class="material-icons" id="Navcons">airplay</i><span class="Nav_Words">
+                {% endif %}
+                Memes</span></a>
+            <a href="#" class="sidenav-trigger" data-target="slide-out"><i class="material-icons" id="Navcons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{% url 'Home' %}"><i class="material-icons" id="Navcons">home</i> </a></li>
+                <li><a href="{% url 'Post_Page' %}"><i class="material-icons left" id="Navcons">attach_file</i>
+                    <span class="Nav_Words">Post</span></a></li>
+                {% if user.is_authenticated %}
+                    {% if request.user.is_staff %}
+                        <li><a href="" class="Nav_Words"><b>Admin</b></a></li>
+                        <li><a href="{% url 'User_List' %}" class="Nav_Words">User List</a></li>
+                    {% endif %}
+                    <li><span><b><i>{{ name }}</i></b></span></li>
+                    <li><a href="{% url 'Profile_Page' %}"><img src="{{ url }}" alt="{{ name }}" class="profile"></a></li>
+                {% else %}
+                    <li><a href="{% url 'Register_Page' %}"><i class="material-icons">account_circle</i></a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</div>
+<ul class="sidenav white-text" id="slide-out">
+    <li>
+        <div class="user-view">
+            <a href="{% url "Profile_Page" %}"><img class="circle" src="{{ url }}" alt="{{ name }}"></a>
+            <a href="{% url "Profile_Page" %}"><span class="black-text name"><b><i>{{ name }}</i></b></span></a>
+        </div>
+    </li>
+    <li><a href="{% url 'Home' %}"><i class="material-icons white-text">home</i>
+        <div style="color: white"> Home Page</div>
+    </a></li>
+    <li><a href="{% url 'Post_Page' %}"><i class="material-icons white-text">attach_file</i>
+        <div style="color: white">Post Memes</div>
+    </a></li>
+    {% if user.is_authenticated %}
+        {% if request.user.is_staff %}
+            <li><a href=""><div style="color: white"><b>Admin</b></div></a></li>
+            <li><a href="{% url 'User_List' %}"><div style="color: white">User List</div></a></li>
+        {% endif %}
+        <li><a href="{% url 'Logout_Page' %}"><div style="color: white">Logout</div><i></i></a></li>
+    {% else %}
+    {% endif %}
+</ul>
+<style>
+    .profile {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        padding-top: 5px;
+    }
+
+    .sidenav {
+        background-color: black;
+        width: 280px;
+        border: solid 3px navy;
+        padding-top: 20px;
+    }
+</style>

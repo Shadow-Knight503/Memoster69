@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/style_home.css" %}">
+    <title>Profile</title>
+</head>
+<style>
+    .image_profile{
+        height: 200px;
+        width: 200px;
+        border-radius: 50%;
+    }
+</style>
+<body>
+{% include "Navbar.html" %}
+<h2>User Profile:</h2>
+    <div class="row">
+        <div class="col s3">
+            <img src="{{ url }}" alt="{{ name }}" class="image_profile">
+        </div>
+        <div class="col s8 offset">
+            <ul>
+                <li><h4>User Name: {{ request.user.username }}</h4></li>
+                <li><h4>Email: {{ request.user.email }}</h4></li>
+                <li><h4>Display Name: {{ name }}</h4></li>
+            </ul>
+            <a href="{% url "Edit_Page" %}"><button class="btn waves-effect left" type="button" name="action" >
+                Edit Profile
+                <i class="material-icons right">send</i>
+            </button></a>
+            <a href="{% url "Build_your_Themes" %}"><button class="btn waves-effect right" type="button" name="action" >
+                Change Theme ?
+                <i class="material-icons right">send</i>
+            </button></a>
+        </div>
+    </div>
+</body>
+</html>

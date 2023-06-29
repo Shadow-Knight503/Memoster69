@@ -1,0 +1,610 @@
+{% load materializecss %}
+{% load static %}
+{% load Filters %}
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/js/materialize.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{% static "css/style_home.css" %}">
+    <title>Home</title>
+</head>
+<style>
+    :root{
+        --NavBack    : {{ theme.Nav_Back }};
+        --NavColor   : {{ theme.Nav_Color }};
+        --NavLine    : {{ theme.Nav_Line }};
+        --CardBack   : {{ theme.Card_Back }};
+        --CardColor  : {{ theme.Card_Color }};
+        --CardBorder : {{ theme.Card_Border }};
+        --BodyBack   : {{ theme.Body_Back }};
+    }
+    body {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        position: relative;
+        color: white;
+        background: var(--BodyBack);
+    }
+    .nav-wrapper{
+        background: var(--NavBack);
+        border-bottom: 2px solid var(--NavLine);
+        color: var(--NavColor);
+    }
+     #Navcons{
+        color: var(--NavColor);
+    }
+    .Nav_Words{
+        color: var(--NavColor);
+    }
+    .card {
+        border: 2px solid var(--CardBorder);
+        background: var(--CardBack);
+        color: var(--CardColor);
+        border-radius: 1%;
+    }
+    .card-reveal{
+        color: var(--CardColor);
+        flood-color: blue;
+    }
+    .profiles {
+        height: 25px;
+        width: 25px;
+        border-radius: 25px;
+    }
+    .OP {
+        color: var(--CardColor);
+        font-size: 25px;
+    }
+    #Title{
+        color: var(--CardColor);
+    }
+    #Cardcons{
+        color: var(--CardColor);
+    }
+    .Cardcons{
+        color: var(--CardColor);
+    }
+    button {
+        border-radius: 50px;
+    }
+    .card-header {
+        position: -webkit-sticky;
+        position: sticky;
+        top: -1px;
+        border-radius: 25px;
+        height: 45px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 5px;
+    }
+    textarea {
+        width: 100%;
+        height: 150px;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        border: 2px solid navy;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        font-size: 16px;
+        resize: none;
+    }
+    .collection .collection-item {
+        background-color: black;
+        border-color: navy;
+    }
+    #SideStuff{
+        float: right;
+        width: 400px;
+        right: 50px;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+    }
+    .card-header{
+        background: var(--CardBack);
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index:100;
+    }
+    svg {
+        overflow: visible;
+    }
+    path {
+        stroke-dashoffset: 0;
+        stroke-dasharray: 1550;
+        transform-origin: center;
+    }
+    .upvote:hover path {
+        animation: stroke-animation 1.75s ease-in-out forwards;
+    }
+    .upvote_back {
+        position: absolute;
+        bottom: 25%;
+        right: 45%;
+    }
+    .animate_Upvote{
+        animation: Upvote 1.25s ease-out forwards;
+    }
+    .animate_Downvote{
+        animation: Downvote 1.25s ease-out forwards;
+    }
+    @keyframes Downvote {
+        0% {
+            fill: steelblue;
+            transform: translateY(-50%) scale(2) rotate(-180deg);
+            opacity: 0.5;
+        }
+        30%{
+            transform: scale(3);
+        }
+        60% {
+            transform: translateY(100%) scale(5);
+            opacity: 0.75;
+        }
+        70% {
+            opacity: 0.75;
+        }
+        100%{
+            transform: scale(2);
+            opacity: 0;
+        }
+    }
+    @keyframes Upvote {
+        0% {
+            fill: orangered;
+            transform: translateY(50%) scale(2) rotate(180deg);
+            opacity: 0.5;
+        }
+        30%{
+            transform: scale(3);
+        }
+        60% {
+            transform: translateY(-100%) scale(5);
+            opacity: 0.75;
+        }
+        70% {
+            opacity: 0.75;
+        }
+        100%{
+            transform: scale(2);
+            opacity: 0;
+        }
+    }
+    @keyframes stroke-animation {
+        0% {
+            stroke-dashoffset: 0;
+        }
+        30% {
+            stroke-dashoffset: 1550;
+            stroke: orangered;
+        }
+        60% {
+            stroke-dashoffset: 3100;
+            fill: transparent;
+            stroke: red;
+            transform: scale(1);
+        }
+        80% {
+            transform: scale(1.3);
+        }
+        90% {
+            transform: scale(1);
+        }
+        100% {
+            stroke-dashoffset: 3100;
+            stroke: orangered;
+        }
+    }
+</style>
+<body>
+{% include 'Navbar.html' %}
+    <div class="card" id="SideStuff">
+        <div class="card-content white-text">
+            <span class="card-title">Side Stuff</span>
+            <p>Don't Know what to put here yet,
+                thinking about putting Credits Or Awards</p>
+        </div>
+    </div>
+    <div class="container">
+        {% for Meme, prpty in posts.items %}
+            <div class="card" style="width: 669px;
+                {% if Meme.Pinned == True %}
+                    border: 3px solid gold;
+                {% elif prpty|get_index:"0" == 1 %}
+                    border: 3px solid orangered;
+                {% elif prpty|get_index:"1" == 1 %}
+                    border: 3px solid steelblue;
+                {% endif %}
+                " id="Meme{{ Meme.id }}">
+                <div class="card-image" style="position: relative">
+                    {% if Meme.Type == 'Img' %}
+                    <img src="{{ Meme.Post.url }}" alt="{{ Meme.Title }}" class="Img" id="Img_{{ Meme.id }}"
+                         style="display: block;width: 100%;height: 100%;object-fit:cover;"
+                         onclick="">
+                    {% elif Meme.Type == 'Gif' %}
+                    <img src="{{ Static_Gif }}" alt="{{ Meme.Title }}" class="Gif" id="Gif_{{ Meme.id }}"
+                         style="display: block;width: 100%;height: 100%;object-fit:cover;border-radius: 5px"
+                         onclick="PlayGif('{{ Meme.id }}', '{{ Meme.Post.url }}')" name="{{ Meme.Post.url }}">
+                    {% elif Meme.Type == 'Vid' %}
+                    <video src="{{ Meme.Post.url }}" controls height="500px" width="500px"
+                           style="display: block;width: 100%;height: 100%;object-fit:cover;"></video>
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="Play_Svg">
+                            <path d="M 90 50 l -70 -40 v 75" stroke="lightblue" fill="lightgrey" class="Play_Button"
+                            id="Play_{{ Meme.id }}">
+                            </path>
+                        </svg>
+                    {% endif %}
+                    <div id="Upvote_back{{ Meme.id }}" class="Upvote_back" style="position: absolute;bottom: 25%;right: 45%;">
+                        <svg class="" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="100"
+                             height="100" >
+                            <path d="M 49.4 8.5 l 25.8 30 h -15 v 46 h -20 v -46 h -15 l 26 -30" fill="transparent"
+                                  stroke-width="3" id="Upvote_move{{ Meme.id }}" class="back">
+                            </path>
+                        </svg>
+                    </div>
+                    <div id="Downvote_back{{ Meme.id }}" class="Downvote_back" style="position: absolute;top: 25%;right: 45%;">
+                        <svg class="" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="100"
+                             height="100" >
+                            <path d="M 50.8 9 h 10 v 45 h 15 l -25 30 l -25 -30 h 15 v -45 h 15" fill="transparent"
+                                  stroke-width="3" id="Downvote_move{{ Meme.id }}" class="back">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <img src="{{ Meme.op.userprofile.Profile_pic.url }}" class="profiles"
+                         alt="{{ Meme.op.userprofile.Nick_Name }}">
+                    <span class="OP">{{ Meme.op.userprofile.Nick_Name }}</span>
+                    <span class="card-title activator white-text text"><span id="Title">{{ Meme.Title }}</span>
+                        <span class="Cardcons right" id="Cmt_Count-{{ Meme.id }}">{{ Meme.comment_set.count }}</span>
+                        <i class="Cardcons material-icons right" id="" onclick="UpdateComment({{ Meme.id }});
+                        this.onclick=null;">comment
+                        </i>
+                    </span>
+                {% if Meme.Pinned == '1' or Meme.Daily == '1' %}
+                    <p>Upvotes not available on Admin Posts</p>
+                {% else %}
+                    <div class="move" id="move">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                             fill="none" class="upvote" style="vertical-align: center"
+                             onclick="Vote({{ Meme.id }},'Upvote', '{{ prpty|get_index:'0' }}', '{{ prpty|get_index:'1' }}')">
+                            <path d=" M 49.4 8.5 l 25.8 30 h -15 v 46 h -20 v -46 h -15 l 26 -30"
+                                  stroke="orangered"
+                                        {% if prpty|get_index:"0" == 1 %}
+                                            fill="orangered"
+                                        {% endif %}
+                                  fill="none" stroke-width="5" id="Upvote{{ Meme.id }}"></path>
+                        </svg>
+                        <span style="font-size: 20px;vertical-align: top;
+                            {% if prpty|get_index:"1" == 1 %}
+                                color: steelblue;
+                            {% elif prpty|get_index:"0" == 1 %}
+                                color: orangered;
+                            {% endif %}
+                                " id="Points{{ Meme.id }}">
+                            {{ Meme.Points }}</span>
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                             fill="none" class="downvote"
+                             onclick="Vote({{ Meme.id }},'Downvote', '{{ prpty|get_index:'0' }}', '{{ prpty|get_index:'1' }}')"
+                             style="vertical-align: center">
+                            <path class="downvote" d="M 50.8 9 h 10 v 45 h 15 l -25 30 l -25 -30 h 15 v -45 h 15"
+                                stroke="steelblue"
+                                    {% if prpty|get_index:"1" == 1 %}
+                                        fill="steelblue"
+                                    {% endif %}
+                                stroke-width="5" id="Downvote{{ Meme.id }}"></path>
+                        </svg>
+                    </div>
+                {% endif %}
+                </div>
+                <div class="card-reveal black">
+                    <div class="card-header">
+                        <span class="card-title white-text text">{{ Meme.Title }}<i onclick="clearInterval(Reload)"
+                                class="material-icons right">close</i></span>
+                    </div>
+                    <form method="post" class="Comment_Form" id="{{ Meme.id }}" name="{{ Meme.id }}"
+                          onsubmit="Comment_Form('{{ Meme.id }}');return false;">
+                        {% csrf_token %}
+                        <div class="comment_builder" id="Comment-{{ Meme.id }}">{{ comment }}</div>
+                        <button class="btn waves-effect waves-light btns" type="submit" value="{{ Meme.id }}"
+                                id="The_Effing_Id-{{ Meme.id }}"
+                                name="The_Effing_Id{{ Meme.id }}">Comment
+                        </button>
+                    </form>
+                    <br>
+                    <button class="btn waves-effect waves-light" type="button" name="action" style="border-radius: 50px;"
+                            onclick="UpdateComment('{{ Meme.id }}')">View Comments
+                        <i class="material-icons left">refresh</i>
+                    </button>
+                    <br>
+                    <div id="Comment_List-{{ Meme.id }}" class="Comment_List">
+                    </div>
+                    <div class="progress" style="display: none" id="Load_Bar_Comment_{{ Meme.id }}">
+                        <div class="indeterminate"></div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <a href="https://www.flaticon.com/free-icons/frog" title="frog icons">Frog icons created by Flat Icons - Flaticon</a>
+    </div>
+<script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous">
+</script>
+<script type="text/javascript">
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start !== -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end === -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start, c_end));
+            }
+        }
+        return "";
+    }
+
+    function isEmpty(el) {
+        return !$.trim(el.html())
+    }
+
+    function delay(delayInms) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(2);
+                }, delayInms);
+            });
+        }
+
+    function Comment_Form(FormId) {
+        $.ajaxSetup({
+            headers: {"X-CSRFToken": getCookie("csrftoken")}
+        });
+        $.ajax({
+            type: 'POST',
+            url: {% url 'Home' %},
+            dataType: 'json',
+            async: true,
+            data: JSON.stringify({
+                'comment': $("#" + FormId).serialize(),
+                'the_effing_id': FormId,
+            }),
+            complete: function () {
+                UpdateComment(FormId);
+                $("#Cmt_Count-" + FormId).load(
+                    ('{% url "Comment_Update" identity=12345 %} #Cmt_Count-' + FormId).replace(/12345/, FormId.toString()))
+            }
+        });
+    }
+
+    function Reply_Form(FormId, Cmnt_Chn) {
+        $.ajaxSetup({
+            headers: {"X-CSRFToken": getCookie("csrftoken")}
+        });
+        $.ajax({
+            type: 'POST',
+            url: {% url 'Home' %},
+            dataType: 'json',
+            async: true,
+            data:{
+                'Act': 'Reply',
+                'comment': document.getElementById("Reply-" + Cmnt_Chn).value,
+                'the_effing_id': FormId,
+                'Cmnt_Chn': Cmnt_Chn,
+            },
+            complete: function () {
+                UpdateComment(FormId);
+                $("#Cmt_Count-" + FormId).load(
+                    ('{% url "Comment_Update" identity=12345 %} #Cmt_Count-' + FormId).replace(/12345/, FormId.toString()))
+            }
+        });
+    }
+
+    function Ring_Form(Ring_ID, clr) {
+        $.ajaxSetup({
+            headers: {"X-CSRFToken": getCookie("csrftoken")}
+        });
+        $.ajax({
+            type: 'POST',
+            url: {% url 'Home' %},
+            dataType: 'json',
+            async : true,
+            data:{
+                'Act': 'Ring_Send',
+                'Cnt': document.getElementById("Reply_Form_" + Ring_ID).value,
+                'Id': Ring_ID,
+                'Color': clr,
+            },
+            complete: function () {
+            }
+        });
+    }
+
+
+    function UpdateComment(FormId) {
+        const id = $("#Comment_List-" + FormId)
+        const load_bar = $("#Load_Bar_Comment_" + FormId)
+        id.empty()
+        load_bar.show()
+        id.load('{% url "Comment_Update" identity=12345 %}'.replace(/12345/, FormId.toString())
+            , function () {
+                load_bar.hide()
+        });
+    }
+
+    function Reply(FormId, Cmnt_Chn) {
+        const Div = document.getElementById(Cmnt_Chn)
+        const Form = document.createElement('form')
+        const Build = '<div class="reply_builder" id="Comment-' + Cmnt_Chn + '"><textarea name="comment"' +
+            ' rows="10" maxlength="500" class="form-control" placeholder="Enter Something here" ' +
+            'style="background-color:black;width:500px;border-radius: 10px" required="" id="Reply-' + Cmnt_Chn + '">' +
+            '</textarea></div>'
+        const Button = '<button class="btn waves-effect waves-light btns" type="submit">Comment </button>'
+        Form.setAttribute('method', 'post')
+        Form.setAttribute('class', 'Comment_Form')
+        Form.setAttribute('id', Cmnt_Chn)
+        Form.setAttribute('onsubmit', 'Reply_Form(' + FormId + ', "' + Cmnt_Chn + '");return false;')
+        Form.innerHTML = Build + Button
+        Div.prepend(Form)
+    }
+
+    function Start_Ring(Ring_ID) {
+        Reload = setInterval(function(){
+            var Len = document.getElementById('Len_Msgs').value
+            $.ajax({
+                type: 'GET',
+                url : "/ring/1/" + Len + "/" + Ring_ID,
+                success: function(data){
+                    const List = JSON.parse(data)
+                    const Ring_Msg = document.getElementById('Ring_Msg_' + Ring_ID)
+                    if (List['New'] === 1) {
+                        for (var I in List['New_Msgs']) {
+                            var Msg = List['New_Msgs'][I]
+                            var Div = document.createElement('div')
+                            var Name_Div = document.createElement('div')
+                            var Color = 'Red'
+                            if (Msg[4] === '0'){ Color = 'Red'}
+                            else if (Msg[4] === '1'){ Color = 'Blue'}
+                            Div.setAttribute('class', 'Msg_' + Color)
+                            Div.setAttribute('id', 'Msg_' + Msg[0])
+                            if (Msg[4] === '0'){}
+                            else{Name_Div.setAttribute('style', 'display: flex;float: right;')}
+                            var Cnt0 = "<img src=" + Msg[2] + " alt='" + Msg[1] + "' class='Pic_" + Color + "'>"
+                            var Cnt1 = '<div class="Name_' + Color + '">' + Msg[1] + '</div><br>'
+                            var Cnt2 = '<div class="Msg_Txt_' + Color + '"><p>' + Msg[3] + '</p></div>'
+                            alert(Msg[3])
+                            Name_Div.innerHTML = Cnt0 + Cnt1 + Cnt2
+                            Div.appendChild(Name_Div)
+                            Ring_Msg.appendChild(Div)
+                        }
+                        document.getElementById('Len_Msgs').value = List['Len']
+                    }
+                },
+                error: function(){
+                    alert('An error occured')
+                }
+            });
+        },3000);
+    }
+
+    function Show_Ring(Ring_ID, Reload, clr) {
+        const id = $("#Ring_Initial_" + Ring_ID)
+        id.empty()
+        id.load('{% url "Ring" reload=0 len_msgs=0 ring_id=12345 %}'.replace(/12345/, Ring_ID.toString()),
+            function () {
+                const ring = document.getElementById('Ring_' + Ring_ID)
+                if (Reload === 1) {
+                    if (clr === 0) {Reveal('Red', 'Blue')}
+                    else {Reveal('Blue', 'Red')}
+                }
+                ring.scrollTop = ring.scrollHeight
+                Start_Ring(Ring_ID)
+            });
+    }
+
+    function Vote(MemeID, VoteType, up_prpty, down_prpty) {
+        const upvote = document.getElementById("Upvote" + MemeID)
+        const downvote = document.getElementById("Downvote" + MemeID)
+        const points = document.getElementById("Points" + MemeID)
+        const border = document.getElementById("Meme" + MemeID)
+        if(VoteType === 'Upvote' ) {
+            border.style.borderColor = "orangered"
+            if (up_prpty === '0') {
+                Animate(MemeID,VoteType,'Orangered');
+                upvote.style.fill = "orangered";
+                upvote.style.stroke = "orangered";
+                points.textContent = +(points.textContent) + 1;
+                points.style.color = "orangered"
+                if(down_prpty === '1') {
+                    downvote.style.fill = "transparent"
+                    points.textContent = +(points.textContent) + 1;
+                }
+            } else {
+                upvote.style.fill = "transparent";
+                points.textContent = +(points.textContent) - 1;
+                points.style.color = "lightgrey"
+            }
+        } else if (VoteType === 'Downvote') {
+            border.style.borderColor = "steelblue"
+            if(down_prpty === '0') {
+                Animate(MemeID,VoteType,'Steelblue');
+                downvote.style.fill = "steelblue";
+                downvote.style.stroke = "steelblue";
+                points.textContent = +(points.textContent) - 1;
+                points.style.color = "steelblue"
+                if(up_prpty === '1') {
+                    upvote.style.fill = "transparent"
+                    points.textContent = +(points.textContent) - 1;
+                }
+            } else {
+                downvote.style.fill = "transparent";
+                points.textContent = +(points.textContent) + 1;
+                points.style.color = "lightgrey"
+            }
+        }
+        $.ajaxSetup({
+            headers: {"X-CSRFToken": getCookie("csrftoken")}
+        });
+        $.ajax({
+            type: "POST",
+            url: "{% url "Home" %}",
+            data: {
+                "Id" : MemeID,
+                "Act": VoteType,
+            },
+            dataType: "json",
+        })
+    }
+
+    function PlayGif(ID, Meme_url) {
+        const Gif = document.getElementById('Gif_' + ID)
+        const OG_Src = Gif.src;
+        if (OG_Src === '{{ Static_Gif }}') {
+            Gif.src = Meme_url;
+        } else {
+            Gif.src = '{{ Static_Gif }}'
+        }
+    }
+
+    async function Animate(MemeID, VoteType, Color) {
+        const target = document.getElementById(VoteType + "_back" + MemeID);
+        const fill = document.getElementById(VoteType + "_move" + MemeID)
+        fill.style.fill = Color
+        fill.style.stroke = Color
+        target.className = "animate_" + VoteType
+        let delayres = await delay(1500);
+        target.className = VoteType + "_back" + MemeID
+        fill.style.fill = "none"
+        fill.style.stroke = "none"
+    }
+
+    var elem = document.querySelector('.sidenav');
+    var instance = new M.Sidenav(elem);
+
+    $(document).ready(function () {
+        $(".Gif").each(function () {
+            $(this).hover(
+                function () {
+                    this.src = this.name
+                },
+                function () {
+                    this.src = '{{ Static_Gif }}'
+                }
+            )
+        })
+        $('.sidenav').sidenav();
+    });
+</script>
+</body>
+</html>

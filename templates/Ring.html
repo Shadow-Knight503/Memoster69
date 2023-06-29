@@ -1,0 +1,773 @@
+{% load static %}
+{% load Filters %}
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/js/materialize.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{% static "css/style_home.css" %}">
+    <title>Ring</title>
+</head>
+<body>
+<style>
+    :root {
+        --Chosen_Clr : 'grey';
+    }
+    .Msg{
+        display: inline-block;
+        padding-top: 5px;
+        padding-left: 5px;
+        width: 70%;
+        height: fit-content;
+        margin-bottom: 10px;
+    }
+    .Cover {
+        position: relative;
+    }
+    .Ring{
+        overflow: scroll;
+        overflow-x: hidden;
+        height: 500px;
+        bottom: 120px;
+        width: 500px;
+        padding: 10px;
+        background: linear-gradient(90deg,
+            rgba(0,0,0,0) calc(50% - 1px),
+            var(--Chosen_Clr) calc(50%),
+            rgba(0,0,0,0) calc(50% + 1px));
+        border: 4px solid var(--Chosen_Clr);
+        border-radius: 5px;
+    }
+    .Ring_Overlay {
+        position: absolute;
+        background: linear-gradient(115deg,
+            {{ theme.Body_Back }} calc(45%),
+            rgba(220, 4, 20, 1) calc(50% - 2px),
+            rgba(192,192,192,1) calc(50%),
+            rgba(22, 1, 178, 1) calc(50% + 2px),
+            {{ theme.Body_Back }} calc(55%));
+        border: 4px solid {{ theme.Nav_Line }};
+        height: 500px;
+        width: 500px;
+        margin: -10px;
+        z-index: 10;
+    {% comment %} Nice {% endcomment %}
+        -webkit-transition: background-color 0.4s ease;
+        -moz-transition: background-color 0.4s ease;
+        -o-transition: background-color 0.4s ease;
+        transition: background-color 0.4s ease;
+        animation-timing-function: ease-in-out;
+        -webkit-animation-timing-function: ease-in-out;
+    }
+    .Ring_Form {
+        background: {{ theme.Body_Back }};
+        border-top: 2px solid var(--Chosen_Clr);
+        min-height: 50px;
+        width: 460px;
+        margin-top: 5px;
+        bottom: 5px;
+        position: absolute;
+    }
+    .Empty_Space {
+        height: 60px;
+        margin-bottom: 0;
+    }
+    .ring_builder {
+        padding-top: 10px;
+    }
+    .Send_Btn {
+        background-color: transparent;
+        border: 3px solid var(--Chosen_Clr);
+        border-radius: 15px;
+        align-items: center;
+        margin-left: 5px;
+        width: 50px;
+        height: 35px;
+        vertical-align: 9px;
+    }
+    .Send_Btn:hover {
+        background-color: var(--Chosen_Clr);
+    }
+    .Send_Btn:hover > .Paper_Plane {
+        color: white;
+    }
+    .Paper_Plane {
+        padding-top: 1px;
+        color: var(--Chosen_Clr);
+    }
+    .Ring_Form textarea {
+        padding-top: 10px;
+        border-radius: 10px;
+        border: 2px solid var(--Chosen_Clr);
+        height: 40px;
+        overflow: hidden;
+        width: 85%;
+        resize: none;
+        font-size: 15px;
+    }
+    .Ring_Form textarea:focus {
+        border: 2px solid var(--Chosen_Clr);
+        box-shadow: 0 0 10px var(--Chosen_Clr);
+    }
+    .Edit_Msg_Red_TextArea:focus {
+        border: 2px solid red;
+        box-shadow: 0 0 10px red;
+    }
+    .Edit_Msg_Blue_TextArea:focus {
+        border: 2px solid blue;
+        box-shadow: 0 0 10px blue;
+    }
+    .Msg_Txt {
+        word-wrap: break-word;
+        position: relative;
+        padding-left: 15px;
+        padding-right: 15px;
+        font-size: 15px;
+        padding-top: -5px;
+        width: fit-content;
+        border-radius: 15px;
+    }
+    .Msg_Reply {
+        word-wrap: break-word;
+        position: relative;
+        padding-left: 5px;
+        padding-right: 5px;
+        font-size: 15px;
+        margin-top: -15px;
+        width: fit-content;
+    }
+    .Msg_Reply > p {
+        margin: 0;
+    }
+    .Pic {
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+    }
+    .Define {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        background: {{ theme.Body_Back }};
+        border-bottom: 2px solid {{ theme.Nav_Line }};
+        margin-bottom: 10px;
+        z-index: 8;
+    }
+    .Red_Holder {
+        border-radius: 100%;
+        margin-top: 15px;
+        margin-left: 15px;
+        width: 200px;
+        height: 200px;
+        background: linear-gradient(to left, rgba(220, 4, 20, 0.5) 1%,{{ theme.Body_Back }} 30%);
+        border: 2px solid red;
+        display: flex;
+        justify-content: center;
+        -webkit-transition: background-color 0.7s ease;
+        -moz-transition: background-color 0.7s ease;
+        -o-transition: background-color 0.7s ease;
+        transition: background-color 0.7s ease;
+    }
+    .Red_Holder:hover {
+        background: red;
+    }
+    .Red_Holder:hover ~ .Red_Txt {
+        color: red;
+    }
+    .Blue_Holder {
+        border-radius: 100%;
+        margin-top: -25px;
+        margin-left: 280px;
+        width: 200px;
+        height: 200px;
+        background: linear-gradient(to right, rgba(22, 1, 178, 0.5) 1%,{{ theme.Body_Back }} 30%);
+        border: 2px solid blue;
+        display: flex;
+        justify-content: center;
+        -webkit-transition: background-color 0.4s ease;
+        -moz-transition: background-color 0.4s ease;
+        -o-transition: background-color 0.4s ease;
+        transition: background-color 0.4s ease;
+    }
+    .Blue_Holder:hover {
+        background: blue;
+    }
+    .Blue_Holder:hover ~ .Blue_Txt {
+        color: blue;
+    }
+    .Red_Choice {
+        align-self: center;
+        height: 150px;
+        width: 80px;
+    }
+    .Blue_Choice {
+        align-self: center;
+        height: 150px;
+        width: 80px;
+    }
+    .Name {
+        float: left;
+        font-size: 5px;
+    }
+    .Red_Txt {
+        word-wrap: break-word;
+        font-size: 25px;
+        text-indent: -10px;
+        top: -20px;
+        color: white;
+        position: relative;
+        text-align: center;
+        max-width: 40%;
+    }
+    .Blue_Txt {
+        word-wrap: break-word;
+        font-size: 25px;
+        left: 60%;
+        text-indent: -10px;
+        top: -270px;
+        color: white;
+        position: relative;
+        text-align: center;
+        max-width: 40%;
+    }
+    .Side_Menu {
+        display: flex;
+    }
+    .Rely_Btn {
+        padding-top: 40%;
+    }
+    .Side_Border {
+        margin-top: 40%;
+        bottom: 0;
+        margin-right: 2px;
+        margin-left: 2px;
+    }
+    .Edit_Btn {
+        font-size: 20px;
+        padding-top: 40%;
+    }
+    .Dot {
+        font-size: 10px;
+    }
+    .Dot:hover {
+        color: var(--clr)
+    }
+    .Dot_Active {
+        font-size: 10px;
+        color: var(--clr);
+    }
+    .Slider_Btns {
+        margin-top: -15px;
+    }
+    .Ring_Box {
+        padding-top: 2px;
+        margin-bottom: -10px;
+        font-size: 10px;
+    }
+    .Ring_Box > p {
+        padding-top: 2px;
+        margin: -5px;
+        border-left: 2px solid var(--Chosen_Clr);
+    }
+    .Reply_Close {
+        font-size: 15px;
+    }
+    .Reply_Close:hover {
+        color: var(--Chosen_Clr);
+    }
+    .Reply_Icon {
+        font-size: 15px;
+        transform: scaleY(-1);
+        color: var(--Chosen_Clr);
+    }
+</style>
+<div class="Cover">
+    <div class="Ring container" id="Ring_{{ Ring_ID }}">
+        <div class="Ring_Overlay" id="Ring_Overlay_{{ Ring_ID }}">
+            <div class="Red_Holder" onclick="Reveal('Red', 'Blue')">
+                <img src="https://res.cloudinary.com/meme-topia/image/upload/v1650466270/image_2022-04-20_201836201_hapu4y.png"
+                alt="Red_Choice" class="Red_Choice">
+            </div>
+            <p class="Red_Txt">{{ Ring.Attack }}</p>
+            <div class="Blue_Holder" onclick="Reveal('Blue', 'Red')">
+                <img src="https://res.cloudinary.com/meme-topia/image/upload/v1650466244/image_2022-04-20_201809417_wtczv7.png"
+                alt="Blue_Choice" class="Blue_Choice">
+            </div>
+            <p class="Blue_Txt">{{ Ring.Defend }}</p>
+        </div>
+        <div class="Define" style="position: sticky;"><b>{{ Ring.Define }}</b></div>
+        <button hidden id="Chosen_Clr_{{ Ring_ID }}" value="0"></button>
+        <button hidden id="Len_Msgs_{{ Ring_ID }}" value="{{ Len_Msg }}"></button>
+        <button hidden id="Len_Edit_{{ Ring_ID }}" value="{{ Len_Edit1 }},{{ Len_Edit2 }}"></button>
+        <button hidden id="Len_Current_{{ Ring_ID }}" value="20"></button>
+        <div id="Ring_Msg_{{ Ring_ID }}">
+            <div class="progress" hidden id="Load_Bar_Ring_{{ Ring_ID }}">
+                <div class="indeterminate"></div>
+            </div>
+            {% for msg in Msgs %}
+                {% if msg.side == '0' %}
+                    <div class="Msg" id="Msg_{{ msg.id }}" style="float: left">
+                        <img src="{{ msg.op.userprofile.Profile_pic.url }}" alt="{{ msg.id }}" class="Pic"
+                             style="float: left">
+                        <div class="Name" style="color: red;">{{ msg.op.userprofile.Nick_Name }}</div>
+                        <br>
+                        {% if msg.Reply != '0' %}
+                            <div class="Msg_Reply" id="Msg_Reply_{{ msg.id }}"
+                                 style="border-left: 4px double {{ msg.Reply|get_clr }};margin-top: -4px;
+                                         margin-bottom: 5px;padding: -5px">
+                                {{ msg.Reply|get_cnt|linebreaks }}
+                            </div>
+                        {% endif %}
+                        {% if msg.Edited == "0" %}
+                            <button id="Edit_No_{{ msg.id }}" value="0" hidden></button>
+                            <div class="Msg_Txt" id="Msg_Cnt_{{ msg.id }}"
+                                 style="background:
+                                   linear-gradient(to top left, rgba(220, 4, 20, 0.5) 1%,{{ theme.Body_Back }} 30%);
+                                         border: 2px solid red;float: left">
+                                <div class="Msg_{{ msg.id }}" id="Msg_0_{{ msg.id }}">
+                                        {{ msg.cnt|linebreaks }}</div>
+                            </div>
+                        {% elif msg.Edited == "1" %}
+                            <button id="Edit_No_{{ msg.id }}" value="1" hidden></button>
+                            <div class="Msg_Txt" id="Msg_Cnt_{{ msg.id }}"
+                                 style="background:
+                                   linear-gradient(to top left, rgba(220, 4, 20, 0.5) 1%,{{ theme.Body_Back }} 30%);
+                                         border: 2px solid red;float: left">
+                                <div class="Msg_{{ msg.id }}" id="Msg_0_{{ msg.id }}" style="display: none">
+                                    {{ msg.cnt|linebreaks }}</div>
+                                <div class="Msg_{{ msg.id }}" id="Msg_1_{{ msg.id }}">
+                                    {{ msg.Edit_1|linebreaks }}</div>
+                                <div class="Slider_Btns">
+                                    <i class="Dot material-icons" id="Dot_{{ msg.id }}"
+                                       onclick="ChangeCnt({{ msg.id }}, 0, 1, this)"
+                                       style="--clr: red">fiber_manual_record</i>
+                                    <i class="Dot_Active material-icons" id="Dot_{{ msg.id }}_Active"
+                                       onclick="ChangeCnt({{ msg.id }}, 1, 1, this)"
+                                       style="--clr: red">fiber_manual_record</i>
+                                </div>
+                            </div>
+                        {% elif msg.Edited == "2" %}
+                            <button id="Edit_No_{{ msg.id }}" value="2" hidden></button>
+                            <div class="Msg_Txt" id="Msg_Cnt_{{ msg.id }}"
+                                 style="background:
+                                   linear-gradient(to top left, rgba(220, 4, 20, 0.5) 1%,{{ theme.Body_Back }} 30%);
+                                         border: 2px solid red;float: left">
+                                <div class="Msg_0" id="Msg_0_{{ msg.id }}" style="display: none">
+                                    {{ msg.cnt|linebreaks }}</div>
+                                <div class="Msg_1" id="Msg_1_{{ msg.id }}" style="display: none">
+                                    {{ msg.Edit_1|linebreaks }}</div>
+                                <div class="Msg_2" id="Msg_2_{{ msg.id }}">
+                                    {{ msg.Edit_2|linebreaks }}</div>
+                                <div class="Slider_Btns">
+                                    <i class="Dot material-icons" id="Dot_{{ msg.id }}"
+                                       onclick="ChangeCnt({{ msg.id }}, 0, 2, this)"
+                                       style="--clr: red">fiber_manual_record</i>
+                                    <i class="Dot material-icons" id="Dot_{{ msg.id }}"
+                                       onclick="ChangeCnt({{ msg.id }}, 1, 2, this)"
+                                       style="--clr: red">fiber_manual_record</i>
+                                    <i class="Dot_Active material-icons" id="Dot_{{ msg.id }}_Active"
+                                       onclick="ChangeCnt({{ msg.id }}, 2, 2, this)"
+                                       style="--clr: red">fiber_manual_record</i>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="Side_Menu" id="Side_Menu_{{ msg.id }}" style="float: left">
+                            {% if msg.op.id == user.id and msg.Edited == '0' %}
+                                <i class="Edit_Btn material-icons" onclick="Msg_Edit({{ msg.id }}, 'Red', 0)"
+                                style="color: red;float: left">edit</i>
+                                <div class="Side_Border" style="border-left: 2px solid red"></div>
+                            {% elif msg.op.id == user.id and msg.Edited == '1' %}
+                                <i class="Edit_Btn material-icons" onclick="Msg_Edit({{ msg.id }}, 'Red', 1)"
+                                style="color: red;float: left">edit</i>
+                                <div class="Side_Border" style="border-left: 2px solid red"></div>
+                            {% endif %}
+                            <i class="Rely_Btn material-icons" style="color: red" onclick="Ring_Reply({{ msg.id }})">reply</i>
+                        </div>
+                    </div>
+                {% elif msg.side == '1' %}
+                    <div class="Msg" id="Msg_{{ msg.id }}" style="float: right">
+                        <div style="float: right;">
+                            <div class="Name" style="color: blue;">{{ msg.op.userprofile.Nick_Name }}</div>
+                            <img src="{{ msg.op.userprofile.Profile_pic.url }}" alt="{{ msg.id }}" class="Pic"
+                                 style="float: left">
+                        </div>
+                        <br>
+                        {% if msg.Reply != '0' %}
+                            <div class="Msg_Reply" id="Msg_Reply_{{ msg.id }}"
+                                 style="border-right: 4px double {{ msg.Reply|get_clr }};float: right;margin-top: -5px;
+                                         margin-bottom: -5px;padding: -5px;">
+                                {{ msg.Reply|get_cnt|linebreaks }}
+                            </div>
+                            <br>
+                        {% endif %}
+                        {% if msg.Edited == "0" %}
+                            <button id="Edit_No_{{ msg.id }}" value="0" hidden></button>
+                            <div class="Msg_Txt" id="Msg_Cnt_{{ msg.id }}"
+                                 style="background:
+                                       linear-gradient(to top left, rgba(22, 1, 178, 0.5) 1%,{{ theme.Body_Back }} 30%);
+                                             border: 2px solid blue;float: right">
+                                <div class="Msg_{{ msg.id }}" id="Msg_0_{{ msg.id }}">
+                                        {{ msg.cnt|linebreaks }}</div>
+                            </div>
+                        {% elif msg.Edited == "1" %}
+                            <button id="Edit_No_{{ msg.id }}" value="1" hidden></button>
+                            <div class="Msg_Txt" id="Msg_Cnt_{{ msg.id }}"
+                                 style="background:
+                                       linear-gradient(to top left, rgba(22, 1, 178, 0.5) 1%,{{ theme.Body_Back }} 30%);
+                                             border: 2px solid blue;float: right">
+                                <div class="Msg_{{ msg.id }}" id="Msg_0_{{ msg.id }}" style="display: none">
+                                    {{ msg.cnt|linebreaks }}</div>
+                                <div class="Msg_{{ msg.id }}" id="Msg_1_{{ msg.id }}">
+                                    {{ msg.Edit_1|linebreaks }}</div>
+                                <div class="Slider_Btns" style="float: right">
+                                    <i class="Dot_Active material-icons" id="Dot_{{ msg.id }}_Active"
+                                       onclick="ChangeCnt({{ msg.id }}, 1, 1, this)"
+                                       style="--clr: blue">fiber_manual_record</i>
+                                    <i class="Dot material-icons" id="Dot_{{ msg.id }}"
+                                       onclick="ChangeCnt({{ msg.id }}, 0, 1, this)"
+                                       style="--clr: blue">fiber_manual_record</i>
+                                </div>
+                            </div>
+                        {% elif msg.Edited == "2" %}
+                            <button id="Edit_No_{{ msg.id }}" value="2" hidden></button>
+                            <div class="Msg_Txt" id="Msg_Cnt_{{ msg.id }}"
+                                 style="background:
+                                       linear-gradient(to top left, rgba(22, 1, 178, 0.5) 1%,{{ theme.Body_Back }} 30%);
+                                             border: 2px solid blue;float: right">
+                                <div class="Msg_0" id="Msg_0_{{ msg.id }}" style="display: none">
+                                    {{ msg.cnt|linebreaks }}</div>
+                                <div class="Msg_1" id="Msg_1_{{ msg.id }}" style="display: none">
+                                    {{ msg.Edit_1|linebreaks }}</div>
+                                <div class="Msg_2" id="Msg_2_{{ msg.id }}">
+                                    {{ msg.Edit_2|linebreaks }}</div>
+                                <div class="Slider_Btns">
+                                    <i class="Dot_Active material-icons" id="Dot_{{ msg.id }}_Active"
+                                       onclick="ChangeCnt({{ msg.id }}, 2, 2, this)"
+                                       style="--clr: blue">fiber_manual_record</i>
+                                    <i class="Dot material-icons" id="Dot_{{ msg.id }}"
+                                       onclick="ChangeCnt({{ msg.id }}, 1, 2, this)"
+                                       style="--clr: blue">fiber_manual_record</i>
+                                    <i class="Dot material-icons" id="Dot_{{ msg.id }}"
+                                       onclick="ChangeCnt({{ msg.id }}, 0, 2, this)"
+                                       style="--clr: blue">fiber_manual_record</i>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="Side_Menu" id="Side_Menu_{{ msg.id }}" style="float: right">
+                            <i class="Rely_Btn material-icons" style="transform: scaleX(-1);color: blue;float: right"
+                               onclick="Ring_Reply({{ msg.id }})">reply</i>
+                            {% if msg.op.id == user.id and msg.Edited == '0' %}
+                                <div class="Side_Border" style="border-left: 2px solid blue"></div>
+                                <i class="Edit_Btn material-icons" onclick="Msg_Edit({{ msg.id }}, 'Blue', 0)"
+                                style="color: blue;transform: scaleX(-1);float: right">edit</i>
+                            {% elif msg.op.id == user.id and msg.Edited == '1' %}
+                                <div class="Side_Border" style="border-left: 2px solid blue"></div>
+                                <i class="Edit_Btn material-icons" onclick="Msg_Edit({{ msg.id }}, 'Blue', 1)"
+                                style="color: blue;transform: scaleX(-1);float: right">edit</i>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="Empty_Space">
+            <form>
+                {% csrf_token %}
+                <div class="ring_builder"><label></label>
+                    <textarea cols="40" rows="10" maxlength="500" class="form-control" id="Empty_Space_{{ Ring_ID }}"
+                              style="background-color: black;height: 40px;margin-top: 10px" required></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="Ring_Form" id="Ring_Box_{{ Ring_ID }}">
+            <form method="post" class="Ring_Form_Send" id="Ring_Form_{{ Ring_ID }}">
+                {% csrf_token %}
+                <div class="Ring_Box_Box"></div>
+                <div class="ring_builder" id="Ring_Build_{{ Ring_ID }}"><label for="Reply_Form_{{ Ring_ID }}"></label>
+                    <textarea cols="40" rows="10" maxlength="500" class="form-control" style="background-color: black;"
+                              oninput="auto_grow(this, 1)" required id="Ring_Txt_{{ Ring_ID }}"></textarea>
+                    <button class="Send_Btn" id="Ring_Btn" type="submit">
+                        <i class="Paper_Plane material-icons">send</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous">
+</script>
+<script type="text/javascript">
+    function delay(delayInms) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(2);
+                }, delayInms);
+            });
+        }
+
+    $('#Ring_{{ Ring_ID }}').scroll(function() {
+        const Ring = document.getElementById('Ring_{{ Ring_ID }}')
+        if (Ring.scrollTop === 0) {
+            $('#Load_Bar_Ring_{{ Ring_ID }}').show()
+            Load_Msgs()
+        }
+    });
+
+    function Ring_Reply(Msg_Id) {
+        if (document.getElementById(`Ring_Box_${Msg_Id}`) !== null) {
+            M.toast({html: 'In Reply Mode !',timeRemaining: 0})
+        } else {
+            const Form = document.getElementById('Ring_Form_' + {{ Ring_ID }})
+            const Ring_Box = document.getElementById('Ring_Box_{{ Ring_ID }}')
+            const Num = document.getElementById(`Edit_No_${Msg_Id}`).value
+            const Cnt = document.getElementById(`Msg_${Num}_${Msg_Id}`).innerText.substr(0, 35)
+            const Ring_Reply = document.createElement('div')
+            Form.setAttribute("onsubmit",`Ring_Reply_Form({{ Ring_ID }}, ${Msg_Id}, ` +
+                document.getElementById('Chosen_Clr_{{ Ring_ID }}').value  + ");return false;");
+            Ring_Reply.setAttribute('class', 'Ring_Box row')
+            Ring_Reply.setAttribute('id', `Ring_Box_${Msg_Id}`)
+            Ring_Reply.innerHTML = `<i class="Reply_Icon material-icons circle col s1">subdirectory_arrow_right</i>` +
+                `<p class="col s10" id="Reply_Txt_${Msg_Id}">${Cnt}</p>` +
+                `<i class="Reply_Close material-icons circle col s1">cancel</i>`
+            Ring_Box.prepend(Ring_Reply)
+
+
+        }
+    }
+
+    function Load_Msgs() {
+        var Num = document.getElementById(`Len_Current_{{ Ring_ID }}`).value
+        var Ring = document.getElementById('Ring_{{ Ring_ID }}')
+        var Initial_Scroll = Ring.scrollHeight
+        $.ajax({
+            type: 'GET',
+            url: `/ring/2/${Num}/69/{{ Ring_ID }}`,
+            success: function (data) {
+                const List = JSON.parse(data)
+                for (var I in List['More_Msgs']) {
+                    const Ring_Msg = document.getElementById('Ring_Msg_{{ Ring_ID }}')
+                    var Msg = List['More_Msgs'][I]
+                    var Div = document.createElement('div')
+                    var Side_Menu = document.createElement('div')
+                    Div.setAttribute('class', 'Msg')
+                    Div.setAttribute('id', 'Msg_' + Msg[0])
+                    if (Msg[4] === '0') {
+                        Div.setAttribute('style', 'float: left')
+                        Div.innerHTML = `<img src="${Msg[2]}" alt="${Msg[1]}" class="Pic" style="float: left">` +
+                                `<div class="Name" style="color: red;">${Msg[1]}</div><br>`
+                        if (Msg[9] !== '0') {
+                            Div.innerHTML += `<div class="Msg_Reply" id="Msg_Reply_${Msg[0]}"` +
+                                `style="border-left: 4px double {{ 69420|get_clr }};">`.replace(/69420/, Msg[9].toString()) +
+                                `{{ 69420|get_cnt|linebreaks }}</div>`.replace(/69420/, Msg[9].toString())
+                        }
+                        if (Msg[5] === '0') {
+                            Div.innerHTML += `<div class="Msg_Txt" id="Msg_Cnt_${Msg[0]}" style="background:` +
+                                `linear-gradient(to top left, rgba(220, 4, 20, 0.5) 1%,{{ theme.Body_Back }} 30%);` +
+                                `border: 2px solid red;float: left">` +
+                                `<div class="Msg_${Msg[0]}" id="Msg_0_${Msg[0]}">` +
+                                `<p>${Msg[3].replace(/\n/, '<br>')}</p>` +
+                                `</div></div>`
+                        } else if (Msg[5] === '1') {
+                            Div.innerHTML += `<div class="Msg_Txt" id="Msg_Cnt_${Msg[0]}" style="background:` +
+                                `linear-gradient(to top left, rgba(220, 4, 20, 0.5) 1%,{{ theme.Body_Back }} 30%);` +
+                                `border: 2px solid red;float: left">` +
+                                `<div class="Msg_${Msg[0]}" id="Msg_0_${Msg[0]}" style="display: none">` +
+                                `<p>${Msg[3].replace(/\n/, '<br>')}</p></div>` +
+                                `<div class="Msg_{{ msg.id }}" id="Msg_1_${Msg[0]}">` +
+                                `<p>${Msg[6].replace(/\n/, '<br>')}</p></div>` +
+                                `<div class="Slider_Btns"><i class="Dot material-icons" id="Dot_${Msg[0]}" ` +
+                                `onclick="ChangeCnt(${Msg[0]}, 0, 1, this)"style="--clr: red">fiber_manual_record</i>` +
+                                `<i class="Dot_Active material-icons" id="Dot_${Msg[0]}_Active" ` +
+                                `onclick="ChangeCnt(${Msg[0]}, 1, 1, this)"style="--clr: red">fiber_manual_record</i>` +
+                                `</div></div>`
+                        } else if (Msg[5] === '2') {
+                            Div.innerHTML += `<div class="Msg_Txt" id="Msg_Cnt_${Msg[0]}" style="background:` +
+                                `linear-gradient(to top left, rgba(220, 4, 20, 0.5) 1%,{{ theme.Body_Back }} 30%);` +
+                                `border: 2px solid red;float: left">` +
+                                `<div class="Msg_${Msg[0]}" id="Msg_0_${Msg[0]}" style="display: none">` +
+                                `<p>${Msg[3].replace(/\n/, '<br>')}</p></div>` +
+                                `<div class="Msg_{{ msg.id }}" id="Msg_1_${Msg[0]}">` +
+                                `<p>${Msg[6].replace(/\n/, '<br>')}</p></div>` +
+                                `<div class="Msg_{{ msg.id }}" id="Msg_2_${Msg[0]}">` +
+                                `<p>${Msg[7].replace(/\n/, '<br>')}</p></div>` +
+                                `<div class="Slider_Btns"><i class="Dot material-icons" id="Dot_${Msg[0]}"` +
+                                `onclick="ChangeCnt(${Msg[0]}, 0, 2, this)"style="--clr: red">fiber_manual_record</i>` +
+                                `<i class="Dot material-icons" id="Dot_${Msg[0]}"` +
+                                `onclick="ChangeCnt(${Msg[0]}, 1, 2, this)"style="--clr: red">fiber_manual_record</i>` +
+                                `<i class="Dot_Active material-icons" id="Dot_${Msg[0]}_Active"` +
+                                `onclick="ChangeCnt(${Msg[0]}, 2, 2, this)"style="--clr: red">fiber_manual_record</i>` +
+                                `</div></div>`
+                        }
+                        Side_Menu.setAttribute('class', 'Side_Menu')
+                        Side_Menu.setAttribute('id', `Side_Menu_${Msg[0]}`)
+                        Side_Menu.setAttribute('style', 'float: left')
+                        if (Msg[8] === {{ user.id }} && Msg[5] === '0') {
+                            Side_Menu.innerHTML += `<i class="Edit_Btn material-icons" onclick="Msg_Edit(${Msg[0]}, 'Red', 0)"` +
+                                `style="color: red;float: left">edit</i>` +
+                                `<div class="Side_Border" style="border-left: 2px solid red"></div>`
+                        } else if (Msg[8] === {{ user.id }} && Msg[5] === '1') {
+                            Side_Menu.innerHTML += `<i class="Edit_Btn material-icons" ` +
+                                `onclick="Msg_Edit(${Msg[0]}, 'Red', 1)" style="color: red;float: left">edit</i>` +
+                                `<div class="Side_Border" style="border-left: 2px solid red"></div>`
+                        }
+                        Side_Menu.innerHTML += `<i class="Rely_Btn material-icons" style="color: red;">reply</i>`
+                    } else if (Msg[4] === '1') {
+                        Div.setAttribute('style', 'float: right')
+                        Div.innerHTML = `<div style="float: right;">` +
+                            `<div class="Name" style="color: blue;">${Msg[1]}</div>` +
+                            `<img src="${Msg[2]}" alt="${Msg[1]}" class="Pic" style="float: left"></div><br>`
+                        if (Msg[5] === '0') {
+                            Div.innerHTML += `<div class="Msg_Txt" id="Msg_Cnt_${Msg[0]}" style="background:` +
+                            `linear-gradient(to top left, rgba(22, 1, 178, 0.5) 1%,{{ theme.Body_Back }} 30%);` +
+                            `border: 2px solid blue;float: right">` +
+                            `<div class="Msg_${Msg[0]}" id="Msg_0_${Msg[0]}">` +
+                            `<p>${Msg[3].replace(/\n/, '<br>')}</p>` +
+                            `</div></div>`
+                        } else if (Msg[5] === '1') {
+                            Div.innerHTML += `<div class="Msg_Txt" id="Msg_Cnt_${Msg[0]}" style="background:` +
+                                `linear-gradient(to top left, rgba(22, 1, 178, 0.5) 1%,{{ theme.Body_Back }} 30%);` +
+                                `border: 2px solid blue;float: right">` +
+                                `<div class="Msg_${Msg[0]}" id="Msg_0_${Msg[0]}" style="display: none">` +
+                                `<p>${Msg[3].replace(/\n/, '<br>')}</p></div>` +
+                                `<div class="Msg_{{ msg.id }}" id="Msg_1_${Msg[0]}">` +
+                                `<p>${Msg[6].replace(/\n/, '<br>')}</p></div>` +
+                                `<div class="Slider_Btns"><i class="Dot material-icons" id="Dot_${Msg[0]}" ` +
+                                `onclick="ChangeCnt(${Msg[0]}, 0, 1, this)"style="--clr: blue">fiber_manual_record</i>` +
+                                `<i class="Dot_Active material-icons" id="Dot_${Msg[0]}_Active" ` +
+                                `onclick="ChangeCnt(${Msg[0]}, 1, 1, this)"style="--clr: blue">fiber_manual_record</i>` +
+                                `</div></div>`
+                        } else if (Msg[5] === '2') {
+                            Div.innerHTML += `<div class="Msg_Txt" id="Msg_Cnt_${Msg[0]}" style="background:` +
+                                `linear-gradient(to top left, rgba(22, 1, 178, 0.5) 1%,{{ theme.Body_Back }} 30%);` +
+                                `border: 2px solid blue;float: right">` +
+                                `<div class="Msg_${Msg[0]}" id="Msg_0_${Msg[0]}" style="display: none">` +
+                                `<p>${Msg[3].replace(/\n/, '<br>')}</p></div>` +
+                                `<div class="Msg_{{ msg.id }}" id="Msg_1_${Msg[0]}">` +
+                                `<p>${Msg[6].replace(/\n/, '<br>')}</p></div>` +
+                                `<div class="Msg_{{ msg.id }}" id="Msg_2_${Msg[0]}">` +
+                                `<p>${Msg[7].replace(/\n/, '<br>')}</p></div>` +
+                                `<div class="Slider_Btns"><i class="Dot material-icons" id="Dot_${Msg[0]}"` +
+                                `onclick="ChangeCnt(${Msg[0]}, 0, 2, this)"style="--clr: blue">fiber_manual_record</i>` +
+                                `<i class="Dot material-icons" id="Dot_${Msg[0]}"` +
+                                `onclick="ChangeCnt(${Msg[0]}, 1, 2, this)"style="--clr: blue">fiber_manual_record</i>` +
+                                `<i class="Dot_Active material-icons" id="Dot_${Msg[0]}_Active"` +
+                                `onclick="ChangeCnt(${Msg[0]}, 2, 2, this)"style="--clr: blue">fiber_manual_record</i>` +
+                                `</div></div>`
+                        }
+                        Side_Menu.setAttribute('class', 'Side_Menu')
+                        Side_Menu.setAttribute('id', `Side_Menu_${Msg[0]}`)
+                        Side_Menu.setAttribute('style', 'float: right')
+                        Side_Menu.innerHTML +=
+                            `<i class="Rely_Btn material-icons" style="color: blue;transform: scaleX(-1)">reply</i>`
+                        if (Msg[8] === {{ user.id }} && Msg[5] === '0') {
+                            Side_Menu.innerHTML +=
+                                `<div class="Side_Border" style="border-left: 2px solid blue"></div>` +
+                                `<i class="Edit_Btn material-icons" onclick="Msg_Edit(${Msg[0]}, 'Blue', 0)"` +
+                                `style="color: blue;float: right;transform: scaleX(-1)">edit</i>`
+                        } else if (Msg[8] === {{ user.id }} && Msg[5] === '1') {
+                            Side_Menu.innerHTML +=
+                                `<div class="Side_Border" style="border-left: 2px solid blue"></div>` +
+                                `<i class="Edit_Btn material-icons" ` +
+                                `onclick="Msg_Edit(${Msg[0]}, 'Blue', 1)" ` +
+                                `style="color: blue;float: right;transform: scaleX(-1)">edit</i>`
+                        }
+                    }
+                    Div.appendChild(Side_Menu)
+                    Ring_Msg.prepend(Div)
+                }
+                document.getElementById(`Len_Current_{{ Ring_ID }}`).value = +(Num) + 20
+                Ring.scrollTop = Ring.scrollHeight - Initial_Scroll
+                $('#Load_Bar_Ring_{{ Ring_ID }}').hide()
+            }
+        })
+    }
+
+    function auto_grow(element, Type) {
+        if (element.scrollHeight > 200) {}
+        else {
+            if (Type === 1) {
+                const Empty = document.getElementById('Empty_Space_' + {{ Ring_ID }})
+                Empty.style.height = (element.scrollHeight) + "px"
+            }
+            element.style.height = '40px'
+            element.style.height = (element.scrollHeight) + "px";
+        }
+    }
+
+    function Reveal (clr) {
+        var Num = 0
+        if (clr === 'Red') {Num = 0}
+        else {Num = 1}
+        document.getElementById('Chosen_Clr_{{ Ring_ID }}').value = Num
+        const Root = document.querySelector(":root")
+        const Overlay = document.getElementById('Ring_Overlay_' + {{ Ring_ID }})
+        const ring = document.getElementById('Ring_' + {{ Ring_ID }})
+        const Form = document.getElementById('Ring_Form_' + {{ Ring_ID }})
+        Form.setAttribute("onsubmit","Ring_Form({{ Ring_ID }}," + Num + ");return false;");
+        Root.style.setProperty('--Chosen_Clr', clr)
+        Overlay.style.display = 'none'
+        ring.scrollTop = ring.scrollHeight
+    }
+
+    function Msg_Edit(MsgId, Color, Type) {
+        const Cnt = document.getElementById(`Msg_Cnt_${MsgId}`)
+        const Txt_Fill = document.getElementById(`Msg_${Type}_${MsgId}`)
+        const Form = document.createElement(`form`)
+        document.getElementById(`Side_Menu_${MsgId}`).style.display = 'None'
+        var Help = '<p style="font-size: 10px;padding: 0;margin: 0;color: var(--Chosen_Clr)">Fuck You</p>'
+        if (Type === 0) {
+            Help = '<p style="font-size: 10px;padding: 0;margin: 0;color: var(--Chosen_Clr)">You can only edit twice</p>'
+        } else {
+            Help = `<p style="font-size: 10px;padding: 0;margin: 0;color: ${Color}">Final Edit</p>`
+        }
+        Form.setAttribute('method', 'post')
+        Form.setAttribute('id', `Edit_Form_${MsgId}`)
+        Form.setAttribute('style', 'box-sizing: border-box;')
+        Form.setAttribute('onsubmit', `Msg_Edit_Form(${MsgId});return false;`)
+        Form.innerHTML = '{% csrf_token %}' +
+            `<textarea cols="40" rows="10" maxlength="500" class="Edit_Msg_${Color}_TextArea" id="Edit_Msg_${MsgId}"` +
+            'style="background-color: none;width: 100%;resize: none;overflow: hidden;font-size: 15px;padding: 5px;' +
+            `border: ${Color} 2px solid;margin-top: 5px;border-radius: 5px"` +
+            `oninput="auto_grow(this, 0)" required id="Reply_Form_{{ Ring_ID }}">${Txt_Fill.innerText}</textarea>` +
+            Help +
+            `<button class="Edit_Submit_Btn" id="Msg_${Color}_Edit_Submit" type="submit"` +
+            `style="border: 2px ${Color} solid;float: right;transform: scale(0.75);border-radius: 10px;"` +
+            `><i class="material-icons" style="color: ${Color}">edit</i></button>`
+        Cnt.innerHTML = ''
+        Cnt.appendChild(Form)
+    }
+
+    {% comment %} Nice {% endcomment %}
+
+    function ChangeCnt (MsgID, Index, Type, Element) {
+        if (Type === 1) {
+            document.getElementById(`Msg_0_${MsgID}`).style.display = 'none'
+            document.getElementById(`Msg_1_${MsgID}`).style.display = 'none'
+            document.getElementById(`Msg_${Index}_${MsgID}`).style.display = 'block'
+            document.getElementById(`Dot_${MsgID}_Active`).classList.replace('Dot_Active', 'Dot')
+            document.getElementById(`Dot_${MsgID}_Active`).id = `Dot_${MsgID}`
+            Element.id = `Dot_${MsgID}_Active`
+            Element.classList.replace('Dot', 'Dot_Active')
+        } else if (Type === 2) {
+            document.getElementById(`Msg_0_${MsgID}`).style.display = 'none'
+            document.getElementById(`Msg_1_${MsgID}`).style.display = 'none'
+            document.getElementById(`Msg_2_${MsgID}`).style.display = 'none'
+            document.getElementById(`Msg_${Index}_${MsgID}`).style.display = 'block'
+            document.getElementById(`Dot_${MsgID}_Active`).classList.replace('Dot_Active', 'Dot')
+            document.getElementById(`Dot_${MsgID}_Active`).id = `Dot_${MsgID}`
+            Element.id = `Dot_${MsgID}_Active`
+            Element.classList.replace('Dot', 'Dot_Active')
+        }
+    }
+</script>
+</body>
+</html>

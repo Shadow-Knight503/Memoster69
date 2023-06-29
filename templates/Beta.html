@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/js/materialize.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Beta Learn</title>
+</head>
+<body>
+
+<div class="img-overlay-wrap">
+    <img src="https://res.cloudinary.com/meme-topia/image/upload/v1643652053/download_ftu7s5.jpg" alt="Hey">
+    <div id="move">
+        <svg class="upvote" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="none">
+            <path d=" M 50 10 l 25 30 h -15 v 45 h -20 v -45 h -15 l 26.9 -30"  fill="none" stroke="navy"
+                  stroke-width="3" onclick="Animate()">
+            </path>
+        </svg>
+    </div>
+</div>
+<button type="button" class="Yeah" >Hello</button>
+<style>
+    body{
+        height: 100vh;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        background: black;
+    }
+    .img-overlay-wrap {
+      position: relative;
+      display: inline-block;
+      transition: transform 150ms ease-in-out;
+    }
+
+    .img-overlay-wrap img {
+       display: block;
+       max-width: 100%;
+       align-self: center;
+    }
+
+    .img-overlay-wrap svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .animate{
+        align-items: center;
+        justify-content: center;
+        animation: bounce 1s ease-out infinite;
+    }
+    @keyframes bounce {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(-10px);
+        }
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous">
+</script>
+<script>
+    function delay(delayInms) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(2);
+                }, delayInms);
+            });
+        }
+    async function Animate() {
+        const target = document.getElementById("move");
+        target.className = "animate"
+        let delayres = await delay(1000);
+        target.className = "move"
+    }
+</script>
+</body>
+</html>

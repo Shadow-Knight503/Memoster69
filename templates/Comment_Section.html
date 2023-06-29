@@ -1,0 +1,338 @@
+{% load static %}
+{% load Filters %}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/js/materialize.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{% static "css/style_home.css" %}">
+    <title>Comment Section</title>
+</head>
+<style>
+    :root{
+        --NavBack    : {{ theme.Nav_Back }};
+        --NavColor   : {{ theme.Nav_Color }};
+        --NavLine    : {{ theme.Nav_Line }};
+        --CardBack   : {{ theme.Card_Back }};
+        --CardColor  : {{ theme.Card_Color }};
+        --CardBorder : {{ theme.Card_Border }};
+        --BodyBack   : {{ theme.Body_Back }};
+    }
+    body {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        position: relative;
+        color: white;
+        background: var(--BodyBack);
+    }
+    .Ring_Initial {
+        background-color: var(--CardBack);
+        border: 2px solid var(--CardBorder);
+        width: 550px;
+        border-radius: 15px;
+        min-height: 50px;
+        padding: 5px;
+    }
+    .Ring_Act_Btn {
+        border-radius: 25px;
+        background: none;
+        border: 3px solid var(--CardBorder);
+        float: right;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+    }
+    .Ring_Act_Btn:hover {
+        background: var(--NavBack);
+    }
+    .Ring_Act_Btn:after {
+        background: var(--NavBack);
+    }
+    .circle {
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+    }
+    .comment {
+        z-index: 5;
+        border-left: slategrey 5px ridge;
+        border-bottom: grey 2px solid;
+        background: rgb(18, 17, 17);
+    {% comment %} Nice {% endcomment %}
+        padding-left: 10px;
+        min-height: 100px;
+        left: 20px;
+        border-radius: 15px;
+        width: 450px;
+        position: relative;
+        transition: ease-in 0.2s;
+    }
+    .Reply:hover + .line {
+        z-index: 2;
+        border-color: darkgoldenrod;
+    }
+    .Reply:hover {
+        border-left: 5px ridge darkgoldenrod;
+    }
+    .Reply_Button {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    .Cmnt_Upvote_Icon {
+    }
+    .Cmnt_Upvote_Icon:hover {
+        fill: orangered;
+    }
+    .Cmnt_Downvote_Icon:hover {
+        fill: steelblue;
+    }
+    .Cmnt_Points {
+        font-size: 15px;
+        vertical-align: 7px;
+    }
+    .Reply_Icon {
+        padding-right: 10px;
+        color: grey;
+        font-size: 30px;
+    }
+    .comment_section {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        position: relative;
+    }
+    .line {
+        z-index: 1;
+        border-left: grey 3px solid;
+        border-top: grey 3px solid;
+        border-bottom: grey 3px solid;
+        border-radius: 5px;
+        position: absolute;
+        bottom: 0;
+        left: -20px;
+        width: 75px;
+        transition: ease-in 0.3s;
+    }
+    .anti-line {
+        z-index: 1;
+        border-right: grey 3px solid;
+        border-top: grey 3px solid;
+        border-bottom: grey 3px solid;
+        border-radius: 5px;
+        position: absolute;
+        bottom: 0;
+        left: 435px;
+        width: 75px;
+        transition: ease-in 0.3s;
+    }
+    .nav-wrapper{
+        background: var(--NavBack);
+        border-bottom: 2px solid var(--NavLine);
+        color: var(--NavColor);
+    }
+     #Navcons{
+        color: var(--NavColor);
+    }
+    .Nav_Words{
+        color: var(--NavColor);
+    }
+    .card {
+        border: 2px solid var(--CardBorder);
+        background: var(--CardBack);
+        color: var(--CardColor);
+        border-radius: 1%;
+    }
+    .card-reveal{
+        color: var(--CardColor);
+        flood-color: blue;
+    }
+    .profiles {
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+        padding-top: 5px;
+    }
+    .OP {
+        color: var(--CardColor);
+        font-size: 25px;
+    }
+    #Title{
+        color: var(--CardColor);
+    }
+    #Cardcons{
+        color: var(--CardColor);
+    }
+    button {
+        border-radius: 50px;
+    }
+    textarea {
+        width: 100%;
+        height: 150px;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        border: 2px solid navy;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        font-size: 16px;
+        resize: none;
+    }
+    #SideStuff{
+        float: right;
+        width: 400px;
+        right: 50px;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+    }
+</style>
+<body>
+    <div id="Comment_List">
+        <span class="Cardcons right" id="Cmt_Count-{{ meme.id }}">{{ count }}</span>
+            <i class="Cardcons material-icons right" id="">comment</i>
+        {% for comment, prpty in com_sec.items %}
+            {% if comment.reply == '0' %}
+                <div class="comment_section" id="Com_sec-{{ comment.id }}">
+                    <div class="comment" id="Comment_{{ comment.id }}" style="
+                         {% if prpty|get_index:"0" == 1 %}border-bottom: orangered 2px solid;
+                            {% elif prpty|get_index:"0" == 2 %}border-bottom: steelblue 2px solid;{% endif %}">
+                        <img src="{{ comment.op.userprofile.Profile_pic.url }}" alt="{{ comment.id }}" class="circle">
+                        <span class="title" style="color: white">{{ comment.op.userprofile.Nick_Name }}{{ comment.id }}</span>
+                        {{ comment.comment|linebreaks }}
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                             fill="none" class="Cmnt_Upvote"
+                             onclick="CmntVote({{ comment.id }}, 'Cmnt_Upvote', '{{ prpty|get_index:"0" }}');return false;">
+                            <path d=" M 49.4 8.5 l 25.8 30 h -15 v 46 h -20 v -46 h -15 l 26 -30"
+                                  stroke="orangered" class="Cmnt_Upvote_Icon"
+                                      {% if prpty|get_index:"0" == 1 %}
+                                          fill="orangered"
+                                      {% endif %}
+                                  fill="none" stroke-width="5" id="Cmnt_Upvote-{{ comment.id }}"></path>
+                        </svg>
+                        <span class="Cmnt_Points">{{ comment.Points }}</span>
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                             fill="none" class="downvote"
+                             onclick="CmntVote({{ comment.id }}, 'Cmnt_Downvote', '{{ prpty|get_index:"0" }}');return false;">
+                            <path d="M 50.8 9 h 10 v 45 h 15 l -25 30 l -25 -30 h 15 v -45 h 15"
+                                stroke="steelblue" class="Cmnt_Downvote_Icon"
+                                  {% if prpty|get_index:"0" == 2 %}
+                                          fill="steelblue"
+                                      {% endif %}
+                                  fill="none" stroke-width="5" id="Cmnt_Downvote-{{ comment.id }}"></path>
+                        </svg>
+                        <span><i class="Reply_Icon material-icons right"
+                              onclick="Reply({{ meme.id }}, '{{ comment.id }}+1', '1', '0', '0', '0')">reply</i></span>
+                    </div>
+                    <div class="comment_section" id="{{ comment.id }}+1"></div>
+                </div>
+                <br>
+            {% else %}
+                <div class="Ring_Initial" id="Ring_Initial_{{ comment.id }}">
+                    <b>{{ comment.Define }}</b><span>
+                    <button class="Ring_Act_Btn" type="button" onclick="Show_Ring({{ comment.id }})"
+                    >Activate</button>
+                </span>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+<script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous">
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        {% for reply, prpty in replies.items %}
+            var Reply_Id = "{{ reply.cmnt_chn }}"
+            var Num = Reply_Id.substr(-2).replace('+','')
+            var Id = Reply_Id.substr(0, Reply_Id.length - 2).replace('+', '')
+            var Id_List = Id.split('-')
+            Id_List.push('{{ reply.id }}')
+            var Og_Id = Id.split("-")[0]
+            var Old_Id = Id.split("-")[(+(Num) - 1)]
+            var Og_Div_Ht = document.getElementById(`Comment_${Old_Id}`).offsetHeight
+            var Coll = document.getElementById(Reply_Id)
+            var Div = document.createElement('div')
+            var Line = document.createElement('div')
+            var NewDiv = document.createElement('div')
+            var Cover_Div = document.createElement('div')
+            var No_Checker = ''
+            if (Coll.innerHTML === "") {
+                Coll.innerHTML = `<button hidden id="No_${Old_Id}" value="1"></button>`
+                No_Checker = document.getElementById(`No_${Old_Id}`)
+            } else {
+                No_Checker = document.getElementById(`No_${Old_Id}`)
+                No_Checker.value = +(No_Checker.value) + 1
+            }
+            var cnt = "<img src='{{ reply.op.userprofile.Profile_pic.url }}' alt='{{ reply.id }}' class='circle'>" +
+                "<span class='title'>{{ reply.op.userprofile.Nick_Name }}</span>" +
+                "{{ reply.comment|linebreaks }}" +
+                `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="25" height="25"` +
+                `fill="none" class="Cmnt_Upvote"` +
+                `onclick="CmntVote({{ reply.id }}, 'Cmnt_Upvote', '{{ prpty|get_index:"0" }}');return false;">` +
+                `<path d="M 49.4 8.5 l 25.8 30 h -15 v 46 h -20 v -46 h -15 l 26 -30" stroke="orangered"` +
+                `{% if prpty|get_index:"0" == 1 %}fill="orangered"{% endif %}` +
+                `fill="none" stroke-width="5" class="Cmnt_Upvote_Icon" id="Upvote_{{ reply.id }}"></path></svg>` +
+                `<span class="Cmnt_Points">{{ reply.Points }}</span>` +
+                `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="25" height="25"` +
+                `fill="none" class="downvote"` +
+                `onclick="CmntVote({{ reply.id }}, 'Cmnt_Downvote', '{{ prpty|get_index:"0" }}');return false;">` +
+                `<path class="Cmnt_Downvote_Icon" d="M 50.8 9 h 10 v 45 h 15 l -25 30 l -25 -30 h 15 v -45 h 15"` +
+                `{% if prpty|get_index:"0" == 2 %}fill="steelblue"{% endif %}` +
+                `fill="none" stroke="steelblue" stroke-width="5" id="Downvote_{{ reply.id }}"></path></svg>` +
+                "<span class='Reply_Button'><i class='Reply_Icon small material-icons right'" +
+                "onclick='Reply({{ meme.id }},\"" + Id + "-" + {{ reply.id }} + "+" + (+(Num) + 1) + "\"," + (+(Num) + 1) +
+                `, ${No_Checker.value}, ${Og_Id}, [${Id_List}])'>reply</i></span>`
+            NewDiv.setAttribute("class", "comment_section")
+            NewDiv.setAttribute("id", Id + '-' + {{ reply.id }} + '+' + (+(Num) + 1))
+            Div.setAttribute("class", "comment Reply")
+            Div.setAttribute("id", 'Comment_{{ reply.id }}')
+            Div.setAttribute("style", '{% if prpty|get_index:"0" == 1 %}border-bottom: orangered 2px solid;' +
+                                        '{% elif prpty|get_index:"0" == 2 %}border-bottom: steelblue 2px solid;{% endif %}')
+            Div.innerHTML = cnt
+            Cover_Div.setAttribute("id", 'Comment_Cover-{{ reply.id }}')
+            Cover_Div.appendChild(Div)
+            Coll.appendChild(Cover_Div)
+            Line.setAttribute("id", `Line_${Id}-{{ reply.id }}`)
+            var New_Ht = document.getElementById('Comment_Cover-{{ reply.id }}').offsetHeight
+            if (['6','7','8','9',].includes(Num.substr(-1))) {
+                Coll.style.right = '20px'
+                Line.setAttribute("class", `anti-line No-${No_Checker.value} Rank-${Num}`)
+            } else {
+                Coll.style.left = '20px'
+                Line.setAttribute("class", `line No-${No_Checker.value} Rank-${Num}`)
+            }
+            Line.setAttribute("style",
+                `top: -${Og_Div_Ht * 0.5}px;height: ${(Og_Div_Ht * 0.5) + Coll.offsetHeight - (New_Ht * 0.5)}px;`)
+            Cover_Div.appendChild(Line)
+            Cover_Div.appendChild(NewDiv)
+        {% endfor %}
+    });
+
+    function CmntVote(CmntID, VoteType, Prpty) {
+        alert('Activated')
+        $.ajaxSetup({
+            headers: {"X-CSRFToken": getCookie("csrftoken")}
+        });
+        $.ajax({
+            type: "POST",
+            url: "{% url "Home" %}",
+            data: {
+                "Id" : CmntID,
+                "Act": VoteType,
+                "Prpty": Prpty,
+            },
+            dataType: "json",
+        })
+    }
+</script>
+</body>
+</html>

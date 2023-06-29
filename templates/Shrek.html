@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/js/materialize.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Our God</title>
+</head>
+<body>
+{% include 'Navbar.html' %}
+<div class="container" style="alignment: center">
+    <div class="card col" style="align-items: center">
+        <div class="card-image" style="width: 500px;height: 500px">
+            <img src="https://res.cloudinary.com/meme-topia/image/upload/v1647020418/4087828_yscpmr.jpg"
+                 alt="Our God">
+            <span class="card-title" style="color: green">Redditor's God</span>
+        </div>
+        <div class="card-content">
+            <b>This is our saviour the one who will save us from Putin</b>
+        </div>
+        <div class="card-action">
+            <a href="https://youtu.be/-wiFU5gPbnw">Proof</a>
+        </div>
+    </div>
+</div>
+<img id="Music" src="https://res.cloudinary.com/meme-topia/image/upload/v1647023923/frame_000_delay-0.05s_xqd4wi.gif"
+    alt="Music of the Gods" onclick="Play()">
+<audio src="https://res.cloudinary.com/meme-topia/video/upload/v1647025680/Shreksophone_Sound_Effect_prg3eq.mp3"
+    id="Audio"></audio>
+<style>
+    #Music{
+        width: 450px;
+        height: 300px;
+        float: right;
+        border: gold 5px outset;
+    }
+    body{
+        background-image:
+                url("https://res.cloudinary.com/meme-topia/image/upload/v1647022213/3399e458b9be434feed54761b1e71b4f_xgxto1.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 100%;
+    }
+    .card{
+        alignment: center;
+        align-content: center;
+        border: gold 5px inset;
+        width: 511px;
+        float: left;
+    }
+    .card-image img{
+        width: 400px;
+        height: 400px;
+        object-fit: cover;
+        float: right;
+    }
+    .nav-wrapper{
+        background-color: navy;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous">
+</script>
+<script type="text/javascript">
+    function Play() {
+        const audio = document.getElementById("Audio")
+        audio.play()
+    }
+    $(document).ready(function () {
+        $("#Music").hover(
+            function () {
+                    $(this).src = "https://res.cloudinary.com/meme-topia/image/upload/v1647023000/shrekophone-shreksophone_kvqm5p.gif"
+            },
+            function() {
+                $(this).attr("src", "https://res.cloudinary.com/meme-topia/image/upload/v1647023923/frame_000_delay-0.05s_xqd4wi.gif");
+            }
+        )
+        $('.sidenav').sidenav();
+    });
+</script>
+</body>
+</html>

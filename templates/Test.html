@@ -1,0 +1,23 @@
+{% load static %}
+{% load Filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Test</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    </head>
+    <body>
+    <button disabled type="button" onclick="codeAddress(['56','awd','se','dwadaw','wdw'])">Click Me</button>
+    <div id="Test">List Stuff: </div>
+    <script type="text/javascript">
+        function codeAddress(List) {
+            const Test = document.getElementById('Test')
+            while (List.length >= 2) {
+                console.log(List.at(-1))
+                Test.innerText += List.pop()
+            }
+        }
+        </script>
+    </body>
+</html>

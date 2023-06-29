@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import cloudinary
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
     'materializecssform',
     'cloudinary_storage',
     'cloudinary',
+    'debug_toolbar',
     'Register_Page',
     'Post',
 ]
@@ -50,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'Memoster.urls'
@@ -123,13 +127,26 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 MEDIA_URL = '/Shadow_Knight/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-CLOUDINARY_STORAGE = {
+CLOUDINARY = {
     'CLOUD_NAME': 'meme-topia',
-    'API_KEY': '292516436937755',
-    'API_SECRET': 'SqTZeI_vyQP-5Fc1hM2i6Nh_r8A'
+    'API_KEY': '472165778211368',
+    'API_SECRET': 'Yl0h25Zzw6Ct3j7V6ZsSRL0fz5s',
 }
+
+CLOUDINARY_URL = 'cloudinary://472165778211368:Yl0h25Zzw6Ct3j7V6ZsSRL0fz5s@meme-topia'
+
+cloudinary.config(
+    cloud_name="meme-topia",
+    api_key="472165778211368",
+    api_secret="Yl0h25Zzw6Ct3j7V6ZsSRL0fz5s",
+    secure=True,
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]

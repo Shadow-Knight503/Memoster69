@@ -1,0 +1,14 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <path d=" M 50.2 9 h 10 v 45 h 15 l -25 30 l -25 -30 h 15 v -45 h 15" stroke="blue" fill="none"
+          stroke-width="3">
+    </path>
+     <path class="upvote" d="M 49.4 8.5 l 25.8 30 h -15 v 46 h -20 v -46 h -15 l 26 -30" fill="none"
+           stroke="red" stroke-width="3">
+     </path>
+    <path d=" M 46.4 14.9 l 24 28.1 h -11.8 v 39.8 h -17.69 v -39.8 h -11.8 l 25 -28.1 " stroke="none" fill="none"
+          stroke-width="1">
+    </path>
+    <path d=" M 50.2 79 l -24 -28.1 h 16.1 v -38 h 15.5 v 38 h 16.8 l -25 28.1 " stroke="none" fill="none"
+          stroke-width="3">
+    </path>
+</svg>

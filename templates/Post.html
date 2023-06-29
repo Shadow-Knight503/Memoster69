@@ -1,46 +1,234 @@
 {% load static %}
 {% load materializecss %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="{% static "css/style_post.css" %}">
-    <title>Post</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/js/materialize.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{% static "css/style_home.css" %}">
+    <title>Post Memes</title>
 </head>
+<style>
+body {
+    font-family: Arial, sans-serif;
+}
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+.tablinks-active {
+  background-color: #ccc;
+}
+.card-image{
+    display: none;
+}
+.tabcontent {
+  display: block;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+.help-block {
+    display: none;
+}
+.profiles {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    padding-top: 5px;
+}
+.card {
+    border: 2px solid navy;
+}
+.Button_Holder {
+    text-align: center;
+    border: 2px solid lightgray;
+    max-width: 100%;
+    padding-top: 110px;
+    padding-left: 275px;
+    height: 300px;
+    overflow: hidden;
+}
+.btn{
+    border-radius: 50px;
+}
+#Trial_Img {
+    display: none;
+}
+</style>
 <body>
-<nav>
-    <div class="nav-wrapper">
-        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="brand-logo"><i class="material-icons">flash_on</i>Memes</a>
-        <ul class="right hide-on-med-and-down">
-            <li><a href="/"><i class="material-icons">home</i> </a></li>
-            <li><a href="/post/"><i class="material-icons">key</i> </a></li>
-            <li><a href="/register/"><i class="material-icons">account_circle</i></a></li>
-        </ul>
+<div id="format_modal" class="modal">
+    <div class="modal-content">
+        <h4>Error</h4>
+        <p>You used the wrong format</p>
+        <p id="format_spec">The supported formats are jpg, jpeg, png</p>
     </div>
-</nav>
-<h2><u>Post Memes Here</u></h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+    <div class="modal-footer">
+      <a href="#" class="modal-action modal-close waves-effect waves btn">Alright</a>
+    </div>
+</div>
+
+<div id="size_modal" class="modal">
+    <div class="modal-content">
+        <h4>Error</h4>
+        <p>It's too big (Please <b>Don't</b> say it)</p>
+        <p id="size_spec">The supported size is 2 MBs</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="modal-action modal-close waves-effect waves btn">Alright</a>
+    </div>
+</div>
+
+<h2>Post Memes</h2>
+
+<div class="container">
+    <label for="List"></label><input id="List" value="['jpg', 'jpeg', 'webp', 'png']" style="display: none">
+    <label for="Limit"></label><input id="Limit" value="2" style="display: none">
+    <div class="tab">
+      <button class="tablinks" id="Tab_Active" onclick="Open(this, 'Image', ['jpg', 'jpeg', 'webp', 'png'], 2)" value="Img"
+      style="background: black">Image</button>
+      <button class="tablinks" id="Tab" onclick="Open(this, 'Gif', ['gif'], 10)" value="Gif">Gif</button>
+      <button class="tablinks" id="Tab" onclick="Open(this, 'Video', ['mp4'], 100)" value="Vid">Video</button>
+    </div>
+
+<div id="Img" class="tabcontent">
+    <h3 id="Title" style="text-align: center">Image</h3>
     <div class="container">
-        {{ form.Title|materializecss }}
-        <div class="file-field input-field">
-            <div class="btn">
-                <span>File</span>
-                <input type="file">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ posts.Type }}
+            <div class="card" style="width: 669px" id="Meme{{ Img.id }}">
+                <div class="Button_Holder">
+                    {{ posts.Post|materializecss }}
+                </div>
+                <div class="card-image" style="position: relative" id="Show">
+                    <img src="" alt="{{ Img.Title }}"
+                         class="Trial" id="Trial" style="display: block;width: 100%;height: 100%;object-fit:cover;">
+                </div>
+                <div class="card-content" id="card-content">
+                    <img src="{{ user.userprofile.Profile_pic.url }}" class="profiles"
+                         alt="{{ user.userprofile.Nick_Name }}">
+                    <span class="OP">{{ user.userprofile.Nick_Name }}</span>
+                    <span class="card-title activator white-text text">{{ posts.Title|materializecss }}
+                        <p class="right">420</p>
+                        <i class="material-icons right activator" id="Cardcons">comment
+                        </i></span>
+                    <div class="move" id="move">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                             fill="none" class="upvote" style="vertical-align: center">
+                            <path d=" M 49.4 8.5 l 25.8 30 h -15 v 46 h -20 v -46 h -15 l 26 -30"
+                                  stroke="orangered" fill="orangered" stroke-width="5" id="Upvote"></path>
+                        </svg>
+                        <span style="font-size: 20px;vertical-align: top" id="Points{{ Img.id }}">
+                            69</span>
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                             fill="none" class="downvote" style="vertical-align: center">
+                            <path class="downvote" d="M 50.8 9 h 10 v 45 h 15 l -25 30 l -25 -30 h 15 v -45 h 15"
+                                stroke="steelblue" fill="none" stroke-width="5" id="Downvote"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="card-reveal black">
+                    <span class="card-title white-text text">{{ Img.Title }}<i class="material-icons nav right" id="Cardcons">
+                        close</i></span>
+                    <br>
+                </div>
             </div>
-            <div class="file-path-wrapper">
-                {{ form.Post_Img }}
-                <input class="file-path validate" type="text">
-            </div>
-        </div>
-        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
-            <i class="material-icons right">send</i>
-        </button>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                <i class="material-icons right">send</i>
+            </button>
+        </form>
     </div>
-</form>
-<h5>*Images only</h5>
+</div>
+</div>
+
+<script>
+$(document).ready(function(){
+    document.getElementById("id_Type").style.display = 'none'
+    $('#format_modal').modal();
+    $('#size_modal').modal();
+});
+function getCookie(c_name) {
+    if (document.cookie.length > 0) {
+        c_start = document.cookie.indexOf(c_name + "=");
+        if (c_start !== -1) {
+            c_start = c_start + c_name.length + 1;
+            c_end = document.cookie.indexOf(";", c_start);
+            if (c_end === -1) c_end = document.cookie.length;
+            return unescape(document.cookie.substring(c_start, c_end));
+        }
+    }
+    return "";
+}
+function Open(Element, Type, Format, Limit) {
+    const elements = document.getElementsByClassName("tablinks");
+    for (let i = 0, len = elements.length; i < len; i++) {
+        elements[i].style.background = 'none'
+        elements[i].id = elements[i].id.substr(0,3)
+    }
+    document.getElementById("Title").textContent = Type
+    document.getElementById("Trial").src = ''
+    document.getElementById("id_Post").textContent = ''
+    $('.file-path').textContent = ''
+    Element.style.background = "black";
+    Element.id += '_Active'
+    const List = document.getElementById("List")
+    const Size = document.getElementById("Limit")
+    List.value = Format
+    Size.value = Limit
+    document.getElementById("id_Type").value = Element.value
+}
+function Meme(event, Element) {
+    const Formats = document.getElementById("List").value
+    const Type = document.getElementById("format_spec")
+    const Size = document.getElementById("size_spec")
+    const Number = document.getElementById("Limit").value
+    const Type_Real = document.getElementById("Tab_Active").value
+    const Num = Element.value.split('.').length
+    if (~ Formats.indexOf(Element.value.split('.')[Num - 1])) {
+        if (Element.files[0].size / 1024 / 1024 > Number) {
+            $('#size_modal').modal('open');
+            Size.textContent = 'The supported size is ' + Number + ' MBs'
+            Element.value = ""
+        } else {
+            const output = document.getElementById('Trial');
+            const show = document.getElementById('Show');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src)
+            }
+            show.style.display = 'block'
+        }
+    } else {
+        $('#format_modal').modal('open');
+        Type.textContent = 'The supported formats are: ' + Formats
+        Element.value = ""
+    }
+}
+</script>
+
 </body>
 </html>

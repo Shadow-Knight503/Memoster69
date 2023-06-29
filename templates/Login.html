@@ -1,0 +1,60 @@
+{% load materializecss %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/style_home.css" %}">
+    <title>Login</title>
+</head>
+<body>
+<nav>
+    <div class="nav-wrapper">
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="brand-logo"><i class="material-icons">flash_on</i>Memes</a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="/"><i class="material-icons">home</i> </a></li>
+            <li><a href="/post/"><i class="material-icons">key</i> </a></li>
+            <li><a href="/register/"><i class="material-icons">account_circle</i></a></li>
+        </ul>
+    </div>
+</nav>
+<h2><u>Login</u></h2>
+<br>
+<br>
+<form method="post" action="">
+    {% csrf_token %}
+    <div class="container">
+        <div class="row">
+            <div class="col s11">
+                {{ forms.username|materializecss:'icon=person' }}
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col s11">
+                {{ forms.password1|materializecss:'icon=lock_open' }}
+            </div>
+            <div class="col s1">
+                <label>
+                    <input type="checkbox" onchange="document.getElementById('id_password1').type = this.checked ? 'text' : 'password'">
+                    <span>Show</span>
+                </label>
+            </div>
+        </div>
+        <button class="btn waves-effect waves-light btn" type="submit" name="action">New here ?
+            <i class="material-icons right">account_circle</i>
+        </button>
+        <button class="btn waves-effect waves-light btn" type="submit" name="action">Welcome Aboard
+            <i class="material-icons right">send</i>
+        </button>
+        {% for message in messages %}
+            <p id="messages">{{ message }}</p>
+        {% endfor %}
+
+    </div>
+</form>
+</body>
+</html>
