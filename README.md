@@ -1,5 +1,5 @@
 # Memoster69
-Website for Memes [Beta Phase]
+A Meme Site [Beta Phase]
 
 A fun website to spend some quality time on memes and discussions            
 Some cool features:               
