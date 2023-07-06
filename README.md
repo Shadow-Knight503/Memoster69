@@ -3,7 +3,7 @@ Website for Memes [Beta Phase]
 
 A fun website to spend some quality time on memes and discussions
 Some cool features:
-+> Post your own Memes, 
++> Post your own Memes,  
 +> Working and Complex Comment Section,
 +> Upvote and Downvote animations
 
